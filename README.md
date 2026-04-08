@@ -1,6 +1,6 @@
 # OSPM
 
-Operating System Process Manager é pequeno visualizador de processos escrito na linguagem C, em conjunto com a biblioteca Allegro5 para a disciplina de Sistemas Operacionais.
+Um pequeno visualizador de processos escrito na linguagem C, em conjunto com a biblioteca Allegro5 para a disciplina de Sistemas Operacionais.
 
 ## Desenvolvimento
 
