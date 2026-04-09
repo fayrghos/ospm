@@ -16,7 +16,8 @@ BIBLIOS := \
 	-lallegro_memfile \
 	-lallegro_acodec \
 	-lallegro_primitives \
-	-lallegro_font
+	-lallegro_font \
+	-lallegro_video
 
 
 rodar: compilar

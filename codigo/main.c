@@ -8,6 +8,7 @@
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_video.h>
 #include <allegro5/altime.h>
 #include <allegro5/bitmap.h>
 #include <allegro5/bitmap_draw.h>
@@ -61,6 +62,7 @@ int main() {
     al_init_ttf_addon();
     al_init_primitives_addon();
     al_init_image_addon();
+    al_init_video_addon();
 
     al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST);
     ALLEGRO_DISPLAY *tela = al_create_display(LARGURA, ALTURA);
@@ -69,6 +71,9 @@ int main() {
     ALLEGRO_EVENT_QUEUE *fila = al_create_event_queue();
     ALLEGRO_EVENT evento;
 
+    ALLEGRO_VIDEO* video_intro = al_open_video("./materiais/intro/intro.ogv");
+    al_start_video(video_intro, al_get_default_mixer());
+
     ALLEGRO_TIMER *timer = al_create_timer(1.0 / 24.0);
     al_start_timer(timer);
 
@@ -76,6 +81,7 @@ int main() {
     al_register_event_source(fila, al_get_mouse_event_source());
     al_register_event_source(fila, al_get_display_event_source(tela));
     al_register_event_source(fila, al_get_timer_event_source(timer));
+    al_register_event_source(fila, al_get_video_event_source(video_intro));
 
     Dados dados = {
         .escrever = true,
@@ -97,9 +103,10 @@ int main() {
     // --------------------------------------------------
     // Controle do Programa
     // --------------------------------------------------
-    bool intro = false;
+    bool intro = true;
     bool redesenhar = true;
     bool easter_egg = false;
+    ALLEGRO_BITMAP *frame;
 
     char texto[256] = "";
     const char *titulos[] = {"Processos", "CPU", "Disco"};
@@ -108,6 +115,11 @@ int main() {
         al_wait_for_event(fila, &evento);
         if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
             break;
+        }
+
+        if(evento.type == ALLEGRO_EVENT_VIDEO_FINISHED) {
+            intro = false;
+            al_close_video(video_intro);
         }
 
         if (evento.type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -120,6 +132,7 @@ int main() {
                     malha = al_load_bitmap("./materiais/imagens/malha.png");
                 }
             }
+
 
             if (evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
                 if (dados.n_tela > 1) {
@@ -164,7 +177,15 @@ int main() {
                     );
                 }
 
-                else {
+                if(intro) {
+                    frame = al_get_video_frame(video_intro);
+
+                if(frame) {
+                    al_draw_scaled_bitmap(
+                        frame, 0, 0, al_get_bitmap_width(frame), al_get_bitmap_height(frame), 0, 0, LARGURA, ALTURA, 0
+                    );
+                }
+            } else {
                     al_draw_filled_rectangle(
                         0, 0, LARGURA, ALTURA, al_map_rgb(29, 29, 32)
                     );
