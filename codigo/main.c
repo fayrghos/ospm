@@ -1,3 +1,4 @@
+#include "./logica/linhaOS.h"
 #include "globais.h"
 #include "logica/digitacao.h"
 #include "logica/modificadores.h"
@@ -29,7 +30,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "./logica/linhaOS.h"
 
 int main() {
     // --------------------------------------------------
@@ -54,6 +54,9 @@ int main() {
 
     ALLEGRO_EVENT_QUEUE *fila = al_create_event_queue();
     ALLEGRO_EVENT ev;
+
+    ALLEGRO_BITMAP *icone = carregar_bitmap("./materiais/imagens/icon.png");
+    al_set_display_icon(tela, icone);
 
     ALLEGRO_VIDEO *intro = al_open_video("./materiais/intro/intro.ogv");
     al_start_video(intro, al_get_default_mixer());
@@ -93,8 +96,9 @@ int main() {
 
     Modificadores mods = {};
     int frame_contagem = 0;
-    Ospm teste = {0}; // Variavel exencial que agrupa os dados necessários para atuação do programa deve ser inicializada assim
-    //Testando o programa
+    Ospm teste = {0}; // Variavel essencial que agrupa os dados necessários para
+                      // atuação do programa deve ser inicializada assim
+    // Testando o programa
     teste.so_info.quantum = 2;
     teste.so_info.tempo_total = 12;
     Processo processo1;
@@ -106,13 +110,13 @@ int main() {
     teste.processos[0] = processo1;
     teste.total_exec = 0;
     teste.total_IO = 0;
-    teste.larg_x = (1280/2)-550;
-            
-            //Quando a tabela estiver pronta use isso para passar os structs processos pfvr, por enquanto ela existe aqui
-            //Carregamente dos processos para a fila
-            for (int i = 0; i < 1; i++) {
-                inserir_fila(&teste.so_info.fila_exec, teste.processos[i]);
-            }
+    teste.larg_x = (1280.0 / 2) - 550;
+
+    // Quando a tabela estiver pronta use isso para passar os structs processos
+    // pfvr, por enquanto ela existe aqui carregamento dos processos para a fila
+    for (int i = 0; i < 1; i++) {
+        inserir_fila(&teste.so_info.fila_exec, teste.processos[i]);
+    }
 
     for (;;) {
         al_wait_for_event(fila, &ev);
@@ -148,14 +152,14 @@ int main() {
             desenhar_principal();
             desenhar_linha_de_execucao(&teste, fonte18);
             if (ev.type == ALLEGRO_EVENT_TIMER) {
-            frame_contagem++;
+                frame_contagem++;
 
-                if(frame_contagem >= 24) {
-                    exec(&teste); //Execução do programa
+                if (frame_contagem >= 24) {
+                    exec(&teste); // Execução do programa
                     frame_contagem = 0;
                 }
             }
-            
+
             break;
         }
 
