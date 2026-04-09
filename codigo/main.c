@@ -1,6 +1,5 @@
 #include "globais.h"
 #include "logica/digitacao.h"
-#include "logica/tabela.h"
 #include "telas/inserir.h"
 #include "telas/intro.h"
 #include "utilidades.h"
