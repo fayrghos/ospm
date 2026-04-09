@@ -2,9 +2,12 @@
 #include <allegro5/allegro_color.h>
 
 typedef struct {
-    int tempo_exe;
-    int tempo_disc;
     ALLEGRO_COLOR cor;
+    int tempo_de_cpu;
+    int tempo_de_IO;
+    char nome [10];
+    int quant_rodadas;
+    bool ativo;
 } Processo;
 
 typedef struct No {
@@ -20,4 +23,4 @@ typedef struct {
 void inserir_fila(Fila *fila, Processo p);
 Processo remover_fila(Fila *fila);
 int isempty(Fila * fila);
-Processo pegar_inicio(Fila fila);
+No *pegar_inicio(Fila *fila);

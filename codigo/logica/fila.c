@@ -17,7 +17,10 @@ void inserir_fila(Fila *fila, Processo p) {
     }
 }
 Processo remover_fila(Fila *fila) {
-    if(!isempty(fila)) {
+    if(isempty(fila)) {
+        Processo vazio = {0};
+        return vazio; 
+    } else {
         if(fila->inicio->prox_no == NULL) {
             No * temp = fila->inicio;
             Processo p = temp->processo;
@@ -37,14 +40,15 @@ Processo remover_fila(Fila *fila) {
 }
 
 int isempty(Fila * fila) {
-    if(fila->inicio && fila->fim == NULL) {
+    if(fila->inicio == NULL) {
         return 1;
     }
     return 0;
 }
 
-Processo pegar_inicio(Fila fila) {
-    if(!isempty(&fila)) {
-        return fila.inicio->processo;
+No *pegar_inicio(Fila *fila) {
+    if(!isempty(fila)) {
+        return fila->inicio;
     }
+    return NULL;
 }
