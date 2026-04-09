@@ -3,6 +3,7 @@
 #include "logica/modificadores.h"
 #include "telas/inserir.h"
 #include "telas/intro.h"
+#include "telas/principal.h"
 #include "utilidades.h"
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_audio.h>
@@ -85,6 +86,10 @@ int main() {
         .tela_atual = T_INTRO // T_INSERIR para pular
     };
 
+    if (globs.tela_atual != T_INTRO) {
+        al_close_video(intro);
+    }
+
     Modificadores mods = {};
 
     for (;;) {
@@ -118,7 +123,7 @@ int main() {
             break;
 
         case T_PRINCIPAL:
-            // ...
+            desenhar_principal();
             break;
         }
 
