@@ -1,6 +1,7 @@
 #include "globais.h"
 #include "logica/digitacao.h"
 #include "logica/tabela.h"
+#include "telas/inserir.h"
 #include "telas/intro.h"
 #include "utilidades.h"
 #include <allegro5/allegro_acodec.h>
@@ -26,23 +27,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
-
-typedef struct {
-    int total_processos;
-    short n_tela;
-    bool escrever;
-    int quantun;
-
-} Dados;
-
-typedef struct {
-    int temp_cpu;
-    int temp_IO;
-    int quant_rodadas;
-    int tempo_total;
-} Processos;
 
 int main() {
     // --------------------------------------------------
@@ -66,7 +51,7 @@ int main() {
     al_set_window_title(tela, "OSPM");
 
     ALLEGRO_EVENT_QUEUE *fila = al_create_event_queue();
-    ALLEGRO_EVENT evento;
+    ALLEGRO_EVENT ev;
 
     ALLEGRO_VIDEO *intro = al_open_video("./materiais/intro/intro.ogv");
     al_start_video(intro, al_get_default_mixer());
@@ -80,55 +65,49 @@ int main() {
     al_register_event_source(fila, al_get_timer_event_source(timer));
     al_register_event_source(fila, al_get_video_event_source(intro));
 
-    Dados dados = {
-        .escrever = true,
-        .n_tela = 1,
-    };
-
+    // --------------------------------------------------
+    // Carregamento de Materiais
+    // --------------------------------------------------
     ALLEGRO_FONT *fonte18 =
         carregar_fonte("./materiais/fontes/LiberationSans.ttf", 18);
 
     ALLEGRO_FONT *fonte72 =
         carregar_fonte("./materiais/fontes/LiberationSans.ttf", 72);
 
-    ALLEGRO_BITMAP *totem = al_load_bitmap("./materiais/imagens/totem.png");
+    ALLEGRO_BITMAP *totem = carregar_bitmap("./materiais/imagens/totem.png");
 
     ALLEGRO_BITMAP *danael = carregar_bitmap("./materiais/imagens/danael.png");
-
-    ALLEGRO_BITMAP *malha = NULL;
 
     // --------------------------------------------------
     // Controle do Programa
     // --------------------------------------------------
-    ETela tela_atual = T_INTRO;
 
-    bool easter_egg = false;
-    ALLEGRO_BITMAP *frame;
-
-    char texto[256] = "";
-    const char *titulos[] = {"Processos", "CPU", "Disco"};
+    Globais globs = {
+        .tela_atual = T_INTRO // T_INSERIR para pular
+    };
 
     for (;;) {
-        al_wait_for_event(fila, &evento);
-        if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+        al_wait_for_event(fila, &ev);
+        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
             break;
+        }
+
+        if (ev.type == ALLEGRO_EVENT_VIDEO_FINISHED) {
+            al_close_video(intro);
+            globs.tela_atual = T_INSERIR;
         }
 
         // O fundo do programa vai ser sempre esse cinza
         al_clear_to_color(al_map_rgb(29, 29, 32));
 
-        if (evento.type == ALLEGRO_EVENT_VIDEO_FINISHED) {
-            al_close_video(intro);
-            tela_atual = T_INSERIR;
-        }
-
-        switch (tela_atual) {
+        switch (globs.tela_atual) {
         case T_INTRO:
             desenhar_intro(intro);
             break;
 
         case T_INSERIR:
-            // ...
+            manusear_insercao(ev, &globs);
+            desenhar_insercao(globs, danael, totem, fonte72, timer);
             break;
 
         case T_PRINCIPAL:
@@ -136,123 +115,8 @@ int main() {
             break;
         }
 
-        // --------------------------------------------------
-        // Código Antigo
-        // --------------------------------------------------
-
-        if (evento.type == ALLEGRO_EVENT_KEY_DOWN) {
-            if (evento.keyboard.keycode == ALLEGRO_KEY_ENTER) {
-                dados.escrever = false;
-                dados.total_processos = atoi(texto);
-
-                if (dados.total_processos > 0) {
-                    dados.n_tela++;
-                    malha = al_load_bitmap("./materiais/imagens/malha.png");
-                }
-            }
-
-            if (evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-                if (dados.n_tela > 1) {
-                    dados.n_tela--;
-                    al_destroy_bitmap(malha);
-
-                    dados.escrever = true;
-                    // Quanto o usuário voltava ao menu com ESC, a string
-                    // tava cheia. Botei isso pra encher ela de '\0'
-                    memset(texto, 0, sizeof(texto));
-                }
-            }
-            if (evento.keyboard.keycode == ALLEGRO_KEY_D && dados.n_tela == 1) {
-                easter_egg = true;
-            }
-        }
-
-        if (evento.type == ALLEGRO_EVENT_KEY_UP) {
-            if (evento.keyboard.keycode == ALLEGRO_KEY_D) {
-                easter_egg = false;
-            }
-        }
-
-        if (dados.escrever) {
-            if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
-                inserir_texto(evento, texto);
-            }
-        }
-
-        if (al_event_queue_is_empty(fila)) {
-            // al_clear_to_color(al_map_rgb(255, 255, 255));
-
-            // switch (dados.n_tela) {
-            // case 1:
-            //     if (easter_egg) {
-            //         al_draw_scaled_bitmap(
-            //             danael, 0, 0, 1024, 1053, 0, 0, LARGURA, ALTURA, 0
-            //         );
-            //     }
-
-            //     al_draw_filled_rectangle(
-            //         0, 0, LARGURA, ALTURA, al_map_rgb(29, 29, 32)
-            //     );
-
-            //     al_draw_bitmap(totem, -65, ALTURA - 325, 0);
-
-            //     al_draw_text(
-            //         fonte72,
-            //         al_map_rgb(255, 255, 255),
-            //         LARGURA / 2,
-            //         ALTURA / 2 - 150,
-            //         ALLEGRO_ALIGN_CENTER,
-            //         "Insira o Total de Processos"
-            //     );
-
-            //     al_draw_filled_rounded_rectangle(
-            //         LARGURA / 2 - 300,
-            //         ALTURA / 2 - 20,
-            //         LARGURA / 2 + 300,
-            //         ALTURA / 2 + 100,
-            //         30,
-            //         30,
-            //         al_map_rgb(52, 52, 54)
-            //     );
-
-            //     // Piscada do cursor
-            //     if (texto[0] == '\0' && al_get_timer_count(timer) % 20 <= 10)
-            //     {
-            //         al_draw_text(
-            //             fonte72,
-            //             al_map_rgb(255, 255, 255),
-            //             LARGURA / 2,
-            //             ALTURA / 2,
-            //             ALLEGRO_ALIGN_CENTER,
-            //             "_"
-            //         );
-            //     }
-
-            //     al_draw_text(
-            //         fonte72,
-            //         al_map_rgb(255, 255, 255),
-            //         LARGURA / 2,
-            //         ALTURA / 2,
-            //         ALLEGRO_ALIGN_CENTER,
-            //         texto
-            //     );
-
-            //     break;
-
-            // case 2:
-            //     al_draw_scaled_bitmap(
-            //         malha, 0, 0, 1920, 1080, 0, 0, LARGURA, ALTURA, 0
-            //     );
-
-            //     break;
-
-            // default:
-            //     break;
-            // }
-
-            if (evento.type == ALLEGRO_EVENT_TIMER) {
-                al_flip_display();
-            }
+        if (ev.type == ALLEGRO_EVENT_TIMER) {
+            al_flip_display();
         }
     }
 
