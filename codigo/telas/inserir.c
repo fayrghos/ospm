@@ -44,9 +44,8 @@ void desenhar_insercao(
         al_draw_scaled_bitmap(
             danael, 0, 0, 1024, 1053, 0, 0, LARGURA, ALTURA, 0
         );
+        return;
     }
-
-    al_draw_filled_rectangle(0, 0, LARGURA, ALTURA, al_map_rgb(29, 29, 32));
 
     al_draw_bitmap(totem, -65, ALTURA - 325, 0);
 
