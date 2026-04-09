@@ -81,7 +81,6 @@ int main() {
     // --------------------------------------------------
     // Controle do Programa
     // --------------------------------------------------
-
     Globais globs = {
         .tela_atual = T_INTRO // T_INSERIR para pular
     };

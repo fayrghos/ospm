@@ -5,8 +5,14 @@
 #include <allegro5/bitmap.h>
 #include <allegro5/events.h>
 
+/*
+ * Lógica da tela de inserção.
+ */
 void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs);
 
+/*
+ * Redesenho da tela de inserção.
+ */
 void desenhar_insercao(
     Globais globs,
     ALLEGRO_BITMAP *danael,
