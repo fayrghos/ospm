@@ -1,5 +1,6 @@
 #include "globais.h"
 #include "logica/digitacao.h"
+#include "logica/modificadores.h"
 #include "telas/inserir.h"
 #include "telas/intro.h"
 #include "utilidades.h"
@@ -84,12 +85,20 @@ int main() {
         .tela_atual = T_INTRO // T_INSERIR para pular
     };
 
+    Modificadores mods = {};
+
     for (;;) {
         al_wait_for_event(fila, &ev);
-        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+        manusear_modificadores(ev, &mods);
+
+        // Fechamento do programa
+        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE ||
+            mods.ctrl && (ev.keyboard.keycode == ALLEGRO_KEY_Q ||
+                          ev.keyboard.keycode == ALLEGRO_KEY_W)) {
             break;
         }
 
+        // Fechamento da intro
         if (ev.type == ALLEGRO_EVENT_VIDEO_FINISHED) {
             al_close_video(intro);
             globs.tela_atual = T_INSERIR;
