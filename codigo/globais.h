@@ -47,7 +47,6 @@ typedef struct {
     Processo processos[8];
     int total_exec;
     int total_IO;
-    int total_processos;
     float larg_x;
 
     int ind_processo_atual;
@@ -83,4 +82,7 @@ typedef enum {
     C_PRETO
 } ECorProcesso;
 
+/*
+ * Transforma um ECorProcesso em sua respectiva cor no Allegro.
+ */
 ALLEGRO_COLOR traduzir_cor_proc(ECorProcesso cor);

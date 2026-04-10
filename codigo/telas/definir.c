@@ -1,5 +1,6 @@
 #include "../globais.h"
 #include "../logica/digitacao.h"
+#include "../utilidades.h"
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/bitmap.h>
@@ -8,65 +9,6 @@
 #include <allegro5/keycodes.h>
 #include <allegro5/timer.h>
 #include <stdio.h>
-
-void _rodar_inteiro(int min, int max, int *atual, int fator) {
-    if (*atual + fator < min) {
-        *atual = min;
-        return;
-    }
-
-    if (*atual + fator > max) {
-        *atual = max;
-        return;
-    }
-
-    *atual += fator;
-}
-
-void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
-    if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
-        switch (ev.keyboard.keycode) {
-        case ALLEGRO_KEY_DOWN:
-            _rodar_inteiro(0, 2, &globs->ind_botao_atual, +1);
-            break;
-
-        case ALLEGRO_KEY_UP:
-            _rodar_inteiro(0, 2, &globs->ind_botao_atual, -1);
-            break;
-
-        case ALLEGRO_KEY_ENTER:
-            globs->ind_processo_atual++;
-            globs->ind_botao_atual = 0;
-
-            if (globs->ind_processo_atual >= globs->q_processos) {
-                globs->tela_atual = T_PRINCIPAL;
-                return;
-            }
-
-            // TODO: Lógica de salvar lá no globs/globs
-
-            memset(globs->txt_cpu, 0, sizeof(globs->txt_cpu));
-            memset(globs->txt_disco, 0, sizeof(globs->txt_disco));
-            memset(globs->txt_rodada, 0, sizeof(globs->txt_rodada));
-        }
-    }
-
-    if (ev.type == ALLEGRO_EVENT_KEY_CHAR) {
-        switch (globs->ind_botao_atual) {
-        case 0:
-            inserir_texto(ev, globs->txt_cpu);
-            break;
-
-        case 1:
-            inserir_texto(ev, globs->txt_disco);
-            break;
-
-        case 2:
-            inserir_texto(ev, globs->txt_rodada);
-            break;
-        }
-    }
-}
 
 void _desenhar_botao(
     float x,
@@ -149,6 +91,51 @@ void _desenhar_processo(
     );
 }
 
+void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
+    if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+        switch (ev.keyboard.keycode) {
+        case ALLEGRO_KEY_DOWN:
+            rodar_inteiro(0, 2, &globs->ind_botao_atual, +1);
+            break;
+
+        case ALLEGRO_KEY_UP:
+            rodar_inteiro(0, 2, &globs->ind_botao_atual, -1);
+            break;
+
+        case ALLEGRO_KEY_ENTER:
+            globs->ind_processo_atual++;
+            globs->ind_botao_atual = 0;
+
+            if (globs->ind_processo_atual >= globs->q_processos) {
+                globs->tela_atual = T_PRINCIPAL;
+                return;
+            }
+
+            // TODO: Lógica de salvar lá no globs/globs
+
+            memset(globs->txt_cpu, 0, sizeof(globs->txt_cpu));
+            memset(globs->txt_disco, 0, sizeof(globs->txt_disco));
+            memset(globs->txt_rodada, 0, sizeof(globs->txt_rodada));
+        }
+    }
+
+    if (ev.type == ALLEGRO_EVENT_KEY_CHAR) {
+        switch (globs->ind_botao_atual) {
+        case 0:
+            inserir_texto(ev, globs->txt_cpu);
+            break;
+
+        case 1:
+            inserir_texto(ev, globs->txt_disco);
+            break;
+
+        case 2:
+            inserir_texto(ev, globs->txt_rodada);
+            break;
+        }
+    }
+}
+
 void desenhar_definicao(
     Globais globs,
     ALLEGRO_BITMAP *danael,
@@ -192,16 +179,6 @@ void desenhar_definicao(
 
     _desenhar_processo(300, ALTURA / 2, 1, 0, fonte_p, globs);
 
-    // al_draw_filled_rounded_rectangle(
-    //     LARGURA / 2 - 300,
-    //     ALTURA / 2,
-    //     LARGURA / 2 + 300,
-    //     ALTURA / 2 + 100,
-    //     30,
-    //     30,
-    //     al_map_rgb(52, 52, 54)
-    // );
-
     // Piscada do cursor
     if (globs.q_processos_txt[0] == '\0' &&
         al_get_timer_count(timer) % 20 <= 10) {
@@ -214,13 +191,4 @@ void desenhar_definicao(
             "_"
         );
     }
-
-    // al_draw_text(
-    //     fonte_g,
-    //     al_map_rgb(255, 255, 255),
-    //     LARGURA / 2,
-    //     ALTURA / 2,
-    //     ALLEGRO_ALIGN_CENTER,
-    //     globs.q_processos_txt
-    // );
 }
