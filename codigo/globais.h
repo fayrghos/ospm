@@ -37,7 +37,7 @@ typedef enum {
  */
 typedef struct {
     ETela tela_atual;
-    bool q_processos;
+    int q_processos;
     char q_processos_txt[30];
     bool easter_egg;
 

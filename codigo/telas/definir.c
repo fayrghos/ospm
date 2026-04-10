@@ -38,6 +38,11 @@ void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
             globs->ind_processo_atual++;
             globs->ind_botao_atual = 0;
 
+            if (globs->ind_processo_atual >= globs->q_processos) {
+                globs->tela_atual = T_PRINCIPAL;
+                return;
+            }
+
             // TODO: Lógica de salvar lá no globs/globs
 
             memset(globs->txt_cpu, 0, sizeof(globs->txt_cpu));
