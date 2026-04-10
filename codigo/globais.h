@@ -1,5 +1,6 @@
 #pragma once
 
+#include "logica/fila.h"
 #include <allegro5/color.h>
 #include <stdbool.h>
 
@@ -7,6 +8,19 @@
 // Bora deixar pixel sempre double então
 #define LARGURA 1366.0
 #define ALTURA 768.0
+
+typedef struct {
+    float x0, x1;
+    ALLEGRO_COLOR cor;
+    int fila;
+} Gradiente;
+
+typedef struct {
+    int quantum;
+    int tempo_total;
+    Fila fila_IO;
+    Fila fila_exec;
+} SO;
 
 /*
  * Enumeração de todas as telas fixas do programa.
@@ -26,6 +40,22 @@ typedef struct {
     bool q_processos;
     char q_processos_txt[30];
     bool easter_egg;
+
+    Gradiente grad_exec[80];
+    Gradiente grad_io[80];
+    SO so_info;
+    Processo processos[8];
+    int total_exec;
+    int total_IO;
+    int total_processos;
+    float larg_x;
+
+    int ind_processo_atual;
+    int ind_botao_atual;
+
+    char txt_cpu[30];
+    char txt_disco[30];
+    char txt_rodada[30];
 } Globais;
 
 /*

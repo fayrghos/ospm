@@ -4,10 +4,8 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/color.h>
-#include <math.h>
-#include <stdlib.h>
 
-void desenhar_linha_de_execucao(Ospm *os, ALLEGRO_FONT *fonte) {
+void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
 
     // Retângulo exterior
     float x0_ret = (1280 / 2) - 600, x1_ret = (1280 / 2) + 680,
@@ -88,7 +86,7 @@ void desenhar_linha_de_execucao(Ospm *os, ALLEGRO_FONT *fonte) {
     }
 }
 
-void exec(Ospm *os) {
+void exec(Globais *os) {
     /*
         Coração do programa, simulador do gerênciamento de processos pelo SO
     */

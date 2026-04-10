@@ -102,26 +102,23 @@ int main() {
 
     Modificadores mods = {};
     int frame_contagem = 0;
-    Ospm teste = {0}; // Variavel essencial que agrupa os dados necessários para
-                      // atuação do programa deve ser inicializada assim
-    // Testando o programa
-    teste.so_info.quantum = 2;
-    teste.so_info.tempo_total = 12;
+    globs.so_info.quantum = 2;
+    globs.so_info.tempo_total = 12;
     Processo processo1;
     processo1.tempo_de_cpu = 6;
     processo1.tempo_de_IO = 0;
     processo1.ativo = true;
     processo1.quant_rodadas = 2;
     processo1.cor = al_map_rgb(255, 0, 0);
-    teste.processos[0] = processo1;
-    teste.total_exec = 0;
-    teste.total_IO = 0;
-    teste.larg_x = (1280.0 / 2) - 550;
+    globs.processos[0] = processo1;
+    globs.total_exec = 0;
+    globs.total_IO = 0;
+    globs.larg_x = (1280.0 / 2) - 550;
 
     // Quando a tabela estiver pronta use isso para passar os structs processos
     // pfvr, por enquanto ela existe aqui carregamento dos processos para a fila
     for (int i = 0; i < 1; i++) {
-        inserir_fila(&teste.so_info.fila_exec, teste.processos[i]);
+        inserir_fila(&globs.so_info.fila_exec, globs.processos[i]);
     }
 
     for (;;) {
@@ -155,20 +152,18 @@ int main() {
             break;
 
         case T_DEFINIR:
-            manusear_definicao(ev, &globs, &teste);
-            desenhar_definicao(
-                globs, teste, danael, totem, fonte32, fonte72, timer
-            );
+            manusear_definicao(ev, &globs);
+            desenhar_definicao(globs, danael, totem, fonte32, fonte72, timer);
             break;
 
         case T_PRINCIPAL:
             desenhar_principal();
-            desenhar_linha_de_execucao(&teste, fonte18);
+            desenhar_linha_de_execucao(&globs, fonte18);
             if (ev.type == ALLEGRO_EVENT_TIMER) {
                 frame_contagem++;
 
                 if (frame_contagem >= 24) {
-                    exec(&teste); // Execução do programa
+                    exec(&globs); // Execução do programa
                     frame_contagem = 0;
                 }
             }

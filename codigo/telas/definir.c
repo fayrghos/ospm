@@ -1,6 +1,5 @@
 #include "../globais.h"
 #include "../logica/digitacao.h"
-#include "../logica/linhaOS.h"
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/bitmap.h>
@@ -24,41 +23,41 @@ void _rodar_inteiro(int min, int max, int *atual, int fator) {
     *atual += fator;
 }
 
-void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs, Ospm *ospm) {
+void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
         switch (ev.keyboard.keycode) {
         case ALLEGRO_KEY_DOWN:
-            _rodar_inteiro(0, 2, &ospm->ind_botao_atual, +1);
+            _rodar_inteiro(0, 2, &globs->ind_botao_atual, +1);
             break;
 
         case ALLEGRO_KEY_UP:
-            _rodar_inteiro(0, 2, &ospm->ind_botao_atual, -1);
+            _rodar_inteiro(0, 2, &globs->ind_botao_atual, -1);
             break;
 
         case ALLEGRO_KEY_ENTER:
-            ospm->ind_processo_atual++;
-            ospm->ind_botao_atual = 0;
+            globs->ind_processo_atual++;
+            globs->ind_botao_atual = 0;
 
-            // TODO: Lógica de salvar lá no globs/ospm
+            // TODO: Lógica de salvar lá no globs/globs
 
-            memset(ospm->txt_cpu, 0, sizeof(ospm->txt_cpu));
-            memset(ospm->txt_disco, 0, sizeof(ospm->txt_disco));
-            memset(ospm->txt_rodada, 0, sizeof(ospm->txt_rodada));
+            memset(globs->txt_cpu, 0, sizeof(globs->txt_cpu));
+            memset(globs->txt_disco, 0, sizeof(globs->txt_disco));
+            memset(globs->txt_rodada, 0, sizeof(globs->txt_rodada));
         }
     }
 
     if (ev.type == ALLEGRO_EVENT_KEY_CHAR) {
-        switch (ospm->ind_botao_atual) {
+        switch (globs->ind_botao_atual) {
         case 0:
-            inserir_texto(ev, ospm->txt_cpu);
+            inserir_texto(ev, globs->txt_cpu);
             break;
 
         case 1:
-            inserir_texto(ev, ospm->txt_disco);
+            inserir_texto(ev, globs->txt_disco);
             break;
 
         case 2:
-            inserir_texto(ev, ospm->txt_rodada);
+            inserir_texto(ev, globs->txt_rodada);
             break;
         }
     }
@@ -116,7 +115,12 @@ void _desenhar_botao(
 }
 
 void _desenhar_processo(
-    float x, float y, int id, ECorProcesso cor, ALLEGRO_FONT *fonte, Ospm ospm
+    float x,
+    float y,
+    int id,
+    ECorProcesso cor,
+    ALLEGRO_FONT *fonte,
+    Globais globs
 ) {
     al_draw_filled_rounded_rectangle(
         x - 120, y - 130, x + 120, y + 130, 20, 20, al_map_rgb(52, 52, 54)
@@ -124,11 +128,11 @@ void _desenhar_processo(
 
     al_draw_filled_circle(x, y - 35, 60, al_map_rgb(255, 255, 255));
     al_draw_filled_circle(
-        x, y - 35, 56, traduzir_cor_proc(ospm.ind_processo_atual % 10)
+        x, y - 35, 56, traduzir_cor_proc(globs.ind_processo_atual % 10)
     );
 
     char proc_txt[30] = "";
-    sprintf(proc_txt, "Processo %d", ospm.ind_processo_atual + 1);
+    sprintf(proc_txt, "Processo %d", globs.ind_processo_atual + 1);
 
     al_draw_text(
         fonte,
@@ -142,7 +146,6 @@ void _desenhar_processo(
 
 void desenhar_definicao(
     Globais globs,
-    Ospm ospm,
     ALLEGRO_BITMAP *danael,
     ALLEGRO_BITMAP *totem,
     ALLEGRO_FONT *fonte_p,
@@ -153,8 +156,8 @@ void desenhar_definicao(
         LARGURA / 2 + 180,
         ALTURA / 2 - 180,
         "Tempo em CPU",
-        ospm.txt_cpu,
-        ospm.ind_botao_atual == 0,
+        globs.txt_cpu,
+        globs.ind_botao_atual == 0,
         fonte_p,
         fonte_g,
         timer
@@ -164,8 +167,8 @@ void desenhar_definicao(
         LARGURA / 2 + 180,
         ALTURA / 2,
         "Tempo em Disco",
-        ospm.txt_disco,
-        ospm.ind_botao_atual == 1,
+        globs.txt_disco,
+        globs.ind_botao_atual == 1,
         fonte_p,
         fonte_g,
         timer
@@ -175,14 +178,14 @@ void desenhar_definicao(
         LARGURA / 2 + 180,
         ALTURA / 2 + 180,
         "Número de Rodadas",
-        ospm.txt_rodada,
-        ospm.ind_botao_atual == 2,
+        globs.txt_rodada,
+        globs.ind_botao_atual == 2,
         fonte_p,
         fonte_g,
         timer
     );
 
-    _desenhar_processo(300, ALTURA / 2, 1, 0, fonte_p, ospm);
+    _desenhar_processo(300, ALTURA / 2, 1, 0, fonte_p, globs);
 
     // al_draw_filled_rounded_rectangle(
     //     LARGURA / 2 - 300,
