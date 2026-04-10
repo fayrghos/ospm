@@ -2,6 +2,7 @@
 #include "globais.h"
 #include "logica/digitacao.h"
 #include "logica/modificadores.h"
+#include "telas/definir.h"
 #include "telas/inserir.h"
 #include "telas/intro.h"
 #include "telas/principal.h"
@@ -49,6 +50,8 @@ int main() {
     al_init_video_addon();
 
     al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST);
+    al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
+    al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
     ALLEGRO_DISPLAY *tela = al_create_display(LARGURA, ALTURA);
     al_set_window_title(tela, "OSPM");
 
@@ -76,6 +79,9 @@ int main() {
     ALLEGRO_FONT *fonte18 =
         carregar_fonte("./materiais/fontes/LiberationSans.ttf", 18);
 
+    ALLEGRO_FONT *fonte32 =
+        carregar_fonte("./materiais/fontes/LiberationSans.ttf", 32);
+
     ALLEGRO_FONT *fonte72 =
         carregar_fonte("./materiais/fontes/LiberationSans.ttf", 72);
 
@@ -87,7 +93,7 @@ int main() {
     // Controle do Programa
     // --------------------------------------------------
     Globais globs = {
-        .tela_atual = T_INTRO // T_INSERIR para pular
+        .tela_atual = T_INSERIR // T_INSERIR para pular
     };
 
     if (globs.tela_atual != T_INTRO) {
@@ -146,6 +152,13 @@ int main() {
         case T_INSERIR:
             manusear_insercao(ev, &globs);
             desenhar_insercao(globs, danael, totem, fonte72, timer);
+            break;
+
+        case T_DEFINIR:
+            manusear_definicao(ev, &globs, &teste);
+            desenhar_definicao(
+                globs, teste, danael, totem, fonte32, fonte72, timer
+            );
             break;
 
         case T_PRINCIPAL:

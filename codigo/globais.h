@@ -1,5 +1,6 @@
 #pragma once
 
+#include <allegro5/color.h>
 #include <stdbool.h>
 
 // Por algum motivo, o clang-tidy reclama quando isso é int
@@ -13,6 +14,7 @@
 typedef enum {
     T_INTRO,
     T_INSERIR,
+    T_DEFINIR,
     T_PRINCIPAL,
 } ETela;
 
@@ -34,3 +36,21 @@ typedef struct {
     bool shift;
     bool alt;
 } Modificadores;
+
+/*
+ * Enumeração de cores reservada para processos.
+ */
+typedef enum {
+    C_VERMELHO,
+    C_VERDE,
+    C_AZUL,
+    C_CINZA,
+    C_LARANJA,
+    C_CIANO,
+    C_MAGENTA,
+    C_AMARELO,
+    C_MARROM,
+    C_PRETO
+} ECorProcesso;
+
+ALLEGRO_COLOR traduzir_cor_proc(ECorProcesso cor);

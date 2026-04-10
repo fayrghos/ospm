@@ -13,7 +13,7 @@ void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs) {
             globs->q_processos = atoi(globs->q_processos_txt);
 
             if (globs->q_processos > 0) {
-                globs->tela_atual = T_PRINCIPAL;
+                globs->tela_atual = T_DEFINIR;
             }
         }
 
