@@ -1,16 +1,35 @@
 #include "../globais.h"
 #include "../logica/digitacao.h"
+#include "../utilidades.h"
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/bitmap.h>
+#include <allegro5/color.h>
 #include <allegro5/events.h>
 #include <allegro5/keycodes.h>
 #include <allegro5/timer.h>
+#include <stdlib.h>
+#include <string.h>
 
 void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs) {
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
         if (ev.keyboard.keycode == ALLEGRO_KEY_ENTER) {
+            strcpy(globs->txt_erro, "");
             globs->q_processos = atoi(globs->q_processos_txt);
+
+            if (globs->q_processos == 0) {
+                strcpy(
+                    globs->txt_erro, "A quantidade não pode ficar em branco."
+                );
+                return;
+            }
+
+            if (globs->q_processos > 20) {
+                strcpy(
+                    globs->txt_erro, "A quantidade não pode ser maior que 20."
+                );
+                return;
+            }
 
             if (globs->q_processos > 0) {
                 globs->tela_atual = T_DEFINIR;
@@ -37,6 +56,7 @@ void desenhar_insercao(
     Globais globs,
     ALLEGRO_BITMAP *danael,
     ALLEGRO_BITMAP *totem,
+    ALLEGRO_FONT *fonte32,
     ALLEGRO_FONT *fonte72,
     ALLEGRO_TIMER *timer
 ) {
@@ -49,44 +69,14 @@ void desenhar_insercao(
 
     al_draw_bitmap(totem, -65, ALTURA - 325, 0);
 
-    al_draw_text(
-        fonte72,
-        al_map_rgb(255, 255, 255),
-        LARGURA / 2,
-        ALTURA / 2 - 150,
-        ALLEGRO_ALIGN_CENTER,
-        "Insira o Total de Processos"
-    );
-
-    al_draw_filled_rounded_rectangle(
-        LARGURA / 2 - 300,
-        ALTURA / 2 - 20,
-        LARGURA / 2 + 300,
-        ALTURA / 2 + 100,
-        30,
-        30,
-        al_map_rgb(52, 52, 54)
-    );
-
-    // Piscada do cursor
-    if (globs.q_processos_txt[0] == '\0' &&
-        al_get_timer_count(timer) % 20 <= 10) {
-        al_draw_text(
-            fonte72,
-            al_map_rgb(255, 255, 255),
-            LARGURA / 2,
-            ALTURA / 2,
-            ALLEGRO_ALIGN_CENTER,
-            "_"
-        );
-    }
-
-    al_draw_text(
-        fonte72,
-        al_map_rgb(255, 255, 255),
+    desenhar_botao(
         LARGURA / 2,
         ALTURA / 2,
-        ALLEGRO_ALIGN_CENTER,
-        globs.q_processos_txt
+        "Total de Processos",
+        globs.q_processos_txt,
+        true,
+        fonte32,
+        fonte72,
+        timer
     );
 }

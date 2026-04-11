@@ -17,6 +17,7 @@ void desenhar_insercao(
     Globais globs,
     ALLEGRO_BITMAP *danael,
     ALLEGRO_BITMAP *totem,
+    ALLEGRO_FONT *fonte32,
     ALLEGRO_FONT *fonte72,
     ALLEGRO_TIMER *timer
 );

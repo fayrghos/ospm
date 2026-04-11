@@ -72,3 +72,54 @@ void desenhar_erros(char *titulo, ALLEGRO_FONT *fonte) {
         titulo
     );
 }
+
+void desenhar_botao(
+    float x,
+    float y,
+    char *titulo,
+    char *escrita,
+    bool selecionado,
+    ALLEGRO_FONT *fonte_p,
+    ALLEGRO_FONT *fonte_g,
+    ALLEGRO_TIMER *timer
+) {
+    al_draw_text(
+        fonte_p,
+        al_map_rgb(255, 255, 255),
+        x - 300,
+        y - 100,
+        ALLEGRO_ALIGN_LEFT,
+        titulo
+    );
+
+    if (selecionado) {
+        al_draw_filled_rounded_rectangle(
+            x - 303, y - 53, x + 303, y + 53, 20, 20, al_map_rgb(222, 221, 218)
+        );
+    }
+
+    al_draw_filled_rounded_rectangle(
+        x - 300, y - 50, x + 300, y + 50, 20, 20, al_map_rgb(52, 52, 54)
+    );
+
+    if (selecionado && al_get_timer_count(timer) % 20 >= 10 &&
+        escrita[0] == '\0') {
+        al_draw_text(
+            fonte_g,
+            al_map_rgb(255, 255, 255),
+            x,
+            y - 40,
+            ALLEGRO_ALIGN_CENTER,
+            "_"
+        );
+    }
+
+    al_draw_text(
+        fonte_g,
+        al_map_rgb(255, 255, 255),
+        x,
+        y - 40,
+        ALLEGRO_ALIGN_CENTER,
+        escrita
+    );
+}

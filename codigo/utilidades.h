@@ -22,3 +22,17 @@ void rodar_inteiro(int min, int max, int *atual, int fator);
  * Desenha uma caixa de erro na tela se 'titulo' não for uma string vazia.
  */
 void desenhar_erros(char *titulo, ALLEGRO_FONT *fonte);
+
+/*
+ * Desenha um botão com um determinado título.
+ */
+void desenhar_botao(
+    float x,
+    float y,
+    char *titulo,
+    char *escrita,
+    bool selecionado,
+    ALLEGRO_FONT *fonte_p,
+    ALLEGRO_FONT *fonte_g,
+    ALLEGRO_TIMER *timer
+);

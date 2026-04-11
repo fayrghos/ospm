@@ -136,7 +136,7 @@ int main() {
 
         case T_INSERIR:
             manusear_insercao(ev, &globs);
-            desenhar_insercao(globs, danael, totem, fonte72, timer);
+            desenhar_insercao(globs, danael, totem, fonte32, fonte72, timer);
             break;
 
         case T_DEFINIR:
