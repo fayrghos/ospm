@@ -7,7 +7,6 @@ typedef struct {
     ALLEGRO_COLOR cor;
     int tempo_de_cpu;
     int tempo_de_IO;
-    char nome[10];
     int quant_rodadas;
     bool ativo;
 } Processo;

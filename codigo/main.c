@@ -102,18 +102,6 @@ int main() {
 
     Modificadores mods = {};
     int frame_contagem = 0;
-    globs.so_info.quantum = 2;
-    globs.so_info.tempo_total = 12;
-    Processo processo1;
-    processo1.tempo_de_cpu = 6;
-    processo1.tempo_de_IO = 0;
-    processo1.ativo = true;
-    processo1.quant_rodadas = 2;
-    processo1.cor = al_map_rgb(255, 0, 0);
-    globs.processos[0] = processo1;
-    globs.total_exec = 0;
-    globs.total_IO = 0;
-    globs.larg_x = (1280.0 / 2) - 550;
 
     // Quando a tabela estiver pronta use isso para passar os structs processos
     // pfvr, por enquanto ela existe aqui carregamento dos processos para a fila

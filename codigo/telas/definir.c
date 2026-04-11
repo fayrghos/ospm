@@ -1,5 +1,6 @@
 #include "../globais.h"
 #include "../logica/digitacao.h"
+#include "../logica/fila.h"
 #include "../utilidades.h"
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
@@ -103,6 +104,14 @@ void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
             break;
 
         case ALLEGRO_KEY_ENTER:
+            globs->processos[globs->ind_processo_atual] = (Processo){
+                .cor = traduzir_cor_proc(globs->ind_processo_atual),
+                .tempo_de_cpu = atoi(globs->txt_cpu),
+                .tempo_de_IO = atoi(globs->txt_disco),
+                .quant_rodadas = atoi(globs->txt_rodada),
+                .ativo = true,
+            };
+
             globs->ind_processo_atual++;
             globs->ind_botao_atual = 0;
 
@@ -111,11 +120,10 @@ void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
                 return;
             }
 
-            // TODO: Lógica de salvar lá no globs/globs
-
             memset(globs->txt_cpu, 0, sizeof(globs->txt_cpu));
             memset(globs->txt_disco, 0, sizeof(globs->txt_disco));
             memset(globs->txt_rodada, 0, sizeof(globs->txt_rodada));
+            break;
         }
     }
 

@@ -1,7 +1,10 @@
 #include "globais.h"
 #include <allegro5/color.h>
+#include <stdio.h>
 
 ALLEGRO_COLOR traduzir_cor_proc(ECorProcesso cor) {
+    cor = cor % MAX_CORES;
+
     switch (cor) {
     case C_VERMELHO:
         return al_map_rgb(192, 28, 40);
@@ -32,5 +35,9 @@ ALLEGRO_COLOR traduzir_cor_proc(ECorProcesso cor) {
 
     case C_PRETO:
         return al_map_rgb(0, 0, 0);
+
+    default:
+        fprintf(stderr, "A tradução de cores falhou em encontrar '%d'!\n", cor);
+        exit(1);
     }
 }

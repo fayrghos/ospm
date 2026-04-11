@@ -44,7 +44,7 @@ typedef struct {
     Gradiente grad_exec[80];
     Gradiente grad_io[80];
     SO so_info;
-    Processo processos[8];
+    Processo processos[20];
     int total_exec;
     int total_IO;
     float larg_x;
@@ -65,6 +65,8 @@ typedef struct {
     bool shift;
     bool alt;
 } Modificadores;
+
+#define MAX_CORES 10
 
 /*
  * Enumeração de cores reservada para processos.
