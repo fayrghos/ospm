@@ -3,7 +3,8 @@
 #include <string.h>
 
 void inserir_texto(ALLEGRO_EVENT ev, char *texto) {
-    if (ev.keyboard.unichar >= 48 && ev.keyboard.unichar <= 57) {
+    if (ev.keyboard.unichar >= 48 && ev.keyboard.unichar <= 57 &&
+        strlen(texto) < 5) {
         texto[strlen(texto)] = (char)ev.keyboard.unichar;
     }
 

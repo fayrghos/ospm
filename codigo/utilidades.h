@@ -17,3 +17,8 @@ ALLEGRO_BITMAP *carregar_bitmap(char *diretorio);
  * Não pode virar menor que 'min' nem maior que 'max'.
  */
 void rodar_inteiro(int min, int max, int *atual, int fator);
+
+/*
+ * Desenha uma caixa de erro na tela se 'titulo' não for uma string vazia.
+ */
+void desenhar_erros(char *titulo, ALLEGRO_FONT *fonte);

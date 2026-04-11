@@ -10,6 +10,8 @@
 #include <allegro5/keycodes.h>
 #include <allegro5/timer.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 void _desenhar_botao(
     float x,
@@ -104,6 +106,15 @@ void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
             break;
 
         case ALLEGRO_KEY_ENTER:
+            strcpy(globs->txt_erro, "");
+
+            // Ver se algum tá vazio
+            if (globs->txt_cpu[0] == '\0' || globs->txt_disco[0] == '\0' ||
+                globs->txt_rodada[0] == '\0') {
+                strcpy(globs->txt_erro, "Preencha todos os campos.");
+                return;
+            }
+
             globs->processos[globs->ind_processo_atual] = (Processo){
                 .cor = traduzir_cor_proc(globs->ind_processo_atual),
                 .tempo_de_cpu = atoi(globs->txt_cpu),
@@ -115,14 +126,17 @@ void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
             globs->ind_processo_atual++;
             globs->ind_botao_atual = 0;
 
+            // Dar um strcpy("") não funcionava, pois os bytes da string ainda
+            // ficavam cheios.
+            memset(globs->txt_cpu, 0, sizeof(globs->txt_cpu));
+            memset(globs->txt_disco, 0, sizeof(globs->txt_disco));
+            memset(globs->txt_rodada, 0, sizeof(globs->txt_rodada));
+
             if (globs->ind_processo_atual >= globs->q_processos) {
                 globs->tela_atual = T_PRINCIPAL;
                 return;
             }
 
-            memset(globs->txt_cpu, 0, sizeof(globs->txt_cpu));
-            memset(globs->txt_disco, 0, sizeof(globs->txt_disco));
-            memset(globs->txt_rodada, 0, sizeof(globs->txt_rodada));
             break;
         }
     }

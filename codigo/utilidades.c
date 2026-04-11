@@ -1,4 +1,6 @@
+#include "globais.h"
 #include <allegro5/allegro_font.h>
+#include <allegro5/allegro_primitives.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -36,4 +38,37 @@ void rodar_inteiro(int min, int max, int *atual, int fator) {
     }
 
     *atual += fator;
+}
+
+void desenhar_erros(char *titulo, ALLEGRO_FONT *fonte) {
+    if (titulo[0] != '\0') {
+        al_draw_filled_rounded_rectangle(
+            297,
+            ALTURA - 83,
+            LARGURA - 297,
+            ALTURA - 17,
+            15,
+            15,
+            al_map_rgb(237, 51, 59)
+        );
+
+        al_draw_filled_rounded_rectangle(
+            300,
+            ALTURA - 80,
+            LARGURA - 300,
+            ALTURA - 20,
+            15,
+            15,
+            al_map_rgb(52, 52, 54)
+        );
+    }
+
+    al_draw_text(
+        fonte,
+        al_map_rgb(246, 97, 81),
+        LARGURA / 2,
+        ALTURA - 68,
+        ALLEGRO_ALIGN_CENTER,
+        titulo
+    );
 }
