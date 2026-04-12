@@ -30,9 +30,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
-int main() {
+int main(int argc, char *argv[]) {
     // --------------------------------------------------
     // Inicialização do Allegro
     // --------------------------------------------------
@@ -92,15 +93,14 @@ int main() {
     // --------------------------------------------------
     // Controle do Programa
     // --------------------------------------------------
-    Globais globs = {
-        .tela_atual = T_INSERIR // T_INSERIR para pular
-    };
+    Globais globs = {};
+    Modificadores mods = {};
 
-    if (globs.tela_atual != T_INTRO) {
+    if (argc > 1 && strcmp(argv[1], "--sem-intro") == 0) {
+        globs.tela_atual = T_INSERIR;
         al_close_video(intro);
     }
 
-    Modificadores mods = {};
     int frame_contagem = 0;
 
     // Quando a tabela estiver pronta use isso para passar os structs processos

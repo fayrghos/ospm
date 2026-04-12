@@ -1,8 +1,8 @@
-CODIGO := $(shell find . -name "*.c")
+EXEC := bin/ospm
+ARGS :=
 
-EXEC := viewer.out
-EXEC_DIR := bin/
-EXEC_CAMINHO := ${EXEC_DIR}${EXEC}
+CODIGOS := $(shell find . -name "*.c")
+FLAGS :=
 
 BIBLIOS := \
 	-lm \
@@ -20,18 +20,27 @@ BIBLIOS := \
 	-lallegro_video
 
 
-rodar: compilar
-	@./${EXEC_CAMINHO}
+# Roda casualmente o programa
+normal: compilar
+	./${EXEC} ${ARGS}
 
 
-debug: compilar
-	gdb ${EXEC_CAMINHO} -q
+# Pula a intro do programa
+rapido r: ARGS += --sem-intro
+rapido r: compilar
+	./${EXEC} ${ARGS}
 
 
+# Chama o GDB para fazer debug
+debug d: FLAGS += -g
+debug d: compilar
+	gdb ${EXEC} -q
+
+
+# Apenas compila o binário
 compilar:
-	@mkdir -p ${EXEC_DIR}
-	gcc ${CODIGO} ${BIBLIOS} -g -o ${EXEC_CAMINHO}
+	@mkdir -p bin
+	gcc ${FLAGS} ${CODIGOS} ${BIBLIOS} -o ${EXEC}
 
 
-limpar:
-	@rm -rf ${EXEC_DIR}
+.PHONY: normal rapido r debug d compilar
