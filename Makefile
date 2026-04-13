@@ -25,8 +25,8 @@ normal: compilar
 	./${EXEC} ${ARGS}
 
 
-# Pula a intro do programa
-rapido r: ARGS += --sem-intro
+# Executa o programa no modo rápido
+rapido r: ARGS += --rapido
 rapido r: compilar
 	./${EXEC} ${ARGS}
 

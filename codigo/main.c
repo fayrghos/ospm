@@ -96,9 +96,21 @@ int main(int argc, char *argv[]) {
     Globais globs = {};
     Modificadores mods = {};
 
-    if (argc > 1 && strcmp(argv[1], "--sem-intro") == 0) {
+    // Configurações do modo rápido
+    if (argc > 1 && strcmp(argv[1], "--rapido") == 0) {
+        // Pula a intro
         globs.tela_atual = T_INSERIR;
         al_close_video(intro);
+
+        // Tela de inserção
+        strcpy(globs.q_processos_txt, "1");
+        strcpy(globs.so_info.txt_quantum, "2");
+        strcpy(globs.so_info.txt_tempo_total, "64");
+
+        // Tela de definição
+        strcpy(globs.txt_cpu, "5");
+        strcpy(globs.txt_disco, "3");
+        strcpy(globs.txt_rodada, "2");
     }
 
     int frame_contagem = 0;
