@@ -54,6 +54,33 @@ void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
             rodar_inteiro(0, 2, &globs->ind_botao_atual, -1);
             break;
 
+        case ALLEGRO_KEY_ESCAPE:
+            if (globs->ind_processo_atual == 0) {
+                globs->tela_atual = T_INSERIR;
+                break;
+            }
+
+            globs->ind_processo_atual--;
+
+            sprintf(
+                globs->txt_cpu,
+                "%d",
+                globs->processos[globs->ind_processo_atual].tempo_de_cpu
+            );
+
+            sprintf(
+                globs->txt_disco,
+                "%d",
+                globs->processos[globs->ind_processo_atual].tempo_de_IO
+            );
+
+            sprintf(
+                globs->txt_rodada,
+                "%d",
+                globs->processos[globs->ind_processo_atual].quant_rodadas
+            );
+            break;
+
         case ALLEGRO_KEY_ENTER:
             strcpy(globs->txt_erro, "");
 
