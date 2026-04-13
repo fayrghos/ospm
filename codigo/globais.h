@@ -4,6 +4,7 @@
 #include <allegro5/color.h>
 #include <stdbool.h>
 
+
 // Por algum motivo, o clang-tidy reclama quando isso é int
 // Bora deixar pixel sempre double então
 #define LARGURA 1366.0
@@ -48,7 +49,9 @@ typedef struct {
     Processo processos[20];
     int total_exec;
     int total_IO;
-    float larg_x;
+    float larg_x_exec;
+    float larg_x_IO;
+
 
     int ind_processo_atual;
     int ind_botao_atual;

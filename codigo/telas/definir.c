@@ -1,6 +1,6 @@
 #include "../globais.h"
 #include "../logica/digitacao.h"
-#include "../logica/fila.h"
+#include "../logica/linhaOS.h"
 #include "../utilidades.h"
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
@@ -83,6 +83,7 @@ void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
 
             if (globs->ind_processo_atual >= globs->q_processos) {
                 globs->tela_atual = T_PRINCIPAL;
+                carregar_fila(globs);
                 return;
             }
 

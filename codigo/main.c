@@ -96,18 +96,23 @@ int main(int argc, char *argv[]) {
     Globais globs = {};
     Modificadores mods = {};
 
+
     if (argc > 1 && strcmp(argv[1], "--sem-intro") == 0) {
         globs.tela_atual = T_INSERIR;
         al_close_video(intro);
     }
 
     int frame_contagem = 0;
-
-    // Quando a tabela estiver pronta use isso para passar os structs processos
-    // pfvr, por enquanto ela existe aqui carregamento dos processos para a fila
-    for (int i = 0; i < 1; i++) {
-        inserir_fila(&globs.so_info.fila_exec, globs.processos[i]);
-    }
+    //Criar uma função de inicialização no futuro, mo pregues
+    globs.larg_x_exec = 90;
+    globs.so_info.fila_exec.fim = NULL;
+    globs.so_info.fila_exec.inicio = NULL;
+    globs.so_info.fila_IO.fim = NULL;
+    globs.so_info.fila_IO.inicio = NULL;
+      //Variaveis temporarias só para teste
+        globs.so_info.quantum = 2;
+        globs.so_info.tempo_total = 64;
+        
 
     for (;;) {
         al_wait_for_event(fila, &ev);
@@ -145,7 +150,7 @@ int main(int argc, char *argv[]) {
             break;
 
         case T_PRINCIPAL:
-            desenhar_principal();
+            desenhar_principal(fonte18);
             desenhar_linha_de_execucao(&globs, fonte18);
             if (ev.type == ALLEGRO_EVENT_TIMER) {
                 frame_contagem++;

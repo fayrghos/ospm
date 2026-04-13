@@ -11,3 +11,5 @@
 void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte);
 
 void exec(Globais *os);
+
+void carregar_fila(Globais *os);
