@@ -96,23 +96,18 @@ int main(int argc, char *argv[]) {
     Globais globs = {};
     Modificadores mods = {};
 
-
     if (argc > 1 && strcmp(argv[1], "--sem-intro") == 0) {
         globs.tela_atual = T_INSERIR;
         al_close_video(intro);
     }
 
     int frame_contagem = 0;
-    //Criar uma função de inicialização no futuro, mo pregues
+    // Criar uma função de inicialização no futuro, mo pregues
     globs.larg_x_exec = 90;
     globs.so_info.fila_exec.fim = NULL;
     globs.so_info.fila_exec.inicio = NULL;
     globs.so_info.fila_IO.fim = NULL;
     globs.so_info.fila_IO.inicio = NULL;
-      //Variaveis temporarias só para teste
-        globs.so_info.quantum = 2;
-        globs.so_info.tempo_total = 64;
-        
 
     for (;;) {
         al_wait_for_event(fila, &ev);

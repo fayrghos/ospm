@@ -13,20 +13,30 @@
 
 void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs) {
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+        if (ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
+            rodar_inteiro(0, 2, &globs->ind_botao_atual, +1);
+        }
+
+        if (ev.keyboard.keycode == ALLEGRO_KEY_UP) {
+            rodar_inteiro(0, 2, &globs->ind_botao_atual, -1);
+        }
+
         if (ev.keyboard.keycode == ALLEGRO_KEY_ENTER) {
             strcpy(globs->txt_erro, "");
             globs->q_processos = atoi(globs->q_processos_txt);
+            globs->so_info.quantum = atoi(globs->so_info.txt_quantum);
+            globs->so_info.tempo_total = atoi(globs->so_info.txt_tempo_total);
 
-            if (globs->q_processos == 0) {
-                strcpy(
-                    globs->txt_erro, "A quantidade não pode ficar em branco."
-                );
+            if (globs->q_processos == 0 || globs->so_info.quantum == 0 ||
+                globs->so_info.tempo_total == 0) {
+                strcpy(globs->txt_erro, "Preencha todos os campos.");
                 return;
             }
 
             if (globs->q_processos > 20) {
                 strcpy(
-                    globs->txt_erro, "A quantidade não pode ser maior que 20."
+                    globs->txt_erro,
+                    "A quantidade de processos não pode ser maior que 20."
                 );
                 return;
             }
@@ -48,7 +58,19 @@ void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs) {
     }
 
     if (ev.type == ALLEGRO_EVENT_KEY_CHAR) {
-        inserir_texto(ev, globs->q_processos_txt);
+        switch (globs->ind_botao_atual) {
+        case 0:
+            inserir_texto(ev, globs->q_processos_txt);
+            break;
+
+        case 1:
+            inserir_texto(ev, globs->so_info.txt_quantum);
+            break;
+
+        case 2:
+            inserir_texto(ev, globs->so_info.txt_tempo_total);
+            break;
+        }
     }
 }
 
@@ -71,10 +93,32 @@ void desenhar_insercao(
 
     desenhar_botao(
         LARGURA / 2,
-        ALTURA / 2,
+        ALTURA / 2 - 200,
         "Total de Processos",
         globs.q_processos_txt,
-        true,
+        globs.ind_botao_atual == 0,
+        fonte32,
+        fonte72,
+        timer
+    );
+
+    desenhar_botao(
+        LARGURA / 2,
+        ALTURA / 2,
+        "Quantum da CPU",
+        globs.so_info.txt_quantum,
+        globs.ind_botao_atual == 1,
+        fonte32,
+        fonte72,
+        timer
+    );
+
+    desenhar_botao(
+        LARGURA / 2,
+        ALTURA / 2 + 200,
+        "Tempo de Execução Total",
+        globs.so_info.txt_tempo_total,
+        globs.ind_botao_atual == 2,
         fonte32,
         fonte72,
         timer
