@@ -1,8 +1,8 @@
 #include "../globais.h"
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/color.h>
 #include <allegro5/allegro_font.h>
+#include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/color.h>
 
 // Horizontais
 #define LHM ALTURA / 2
@@ -22,7 +22,7 @@ void desenhar_principal(ALLEGRO_FONT *fonte) {
     // --------------------------------------------------
     // Gráfico
     // --------------------------------------------------
-   
+
     static const short espaco = 75;
 
     al_draw_filled_rectangle(
@@ -30,9 +30,9 @@ void desenhar_principal(ALLEGRO_FONT *fonte) {
     );
 
     // Linha central
-    al_draw_filled_rectangle(
-        bd * 3, LHI - 3, LARGURA - bd * 3, LHI + 3, al_map_rgb(100, 100, 100)
-    );
+    // al_draw_filled_rectangle(
+    //     bd * 3, LHI - 3, LARGURA - bd * 3, LHI + 3, al_map_rgb(100, 100, 100)
+    // );
 
     // Linha superior
     al_draw_filled_rectangle(
@@ -52,11 +52,23 @@ void desenhar_principal(ALLEGRO_FONT *fonte) {
         al_map_rgb(100, 100, 100)
     );
 
-     //Exec
-    al_draw_text(fonte, al_map_rgb(255, 255, 255), LARGURA/2+450,
-     ((ALTURA/2)+(ALTURA/4)-125), 0, "Linha de Exec");
+    // CPU
+    al_draw_text(
+        fonte,
+        al_map_rgb(255, 255, 255),
+        LARGURA - 90,
+        (ALTURA / 2) + (ALTURA / 4) - 125,
+        ALLEGRO_ALIGN_RIGHT,
+        "Linha de CPU"
+    );
 
-     //IO
-     al_draw_text(fonte, al_map_rgb(255, 255, 255), LARGURA/2+450,
-     ((ALTURA/2)+(ALTURA/4)+35), 0, "Linha de IO");
+    // IO
+    al_draw_text(
+        fonte,
+        al_map_rgb(255, 255, 255),
+        LARGURA - 90,
+        (ALTURA / 2) + (ALTURA / 4) + 35,
+        ALLEGRO_ALIGN_RIGHT,
+        "Linha de IO"
+    );
 }

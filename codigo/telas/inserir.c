@@ -42,6 +42,7 @@ void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs) {
             }
 
             if (globs->q_processos > 0) {
+                globs->ind_botao_atual = 0;
                 globs->tela_atual = T_DEFINIR;
             }
         }
