@@ -98,6 +98,8 @@ void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
                 .cor = traduzir_cor_proc(globs->ind_processo_atual),
                 .tempo_de_cpu = atoi(globs->txt_cpu),
                 .tempo_de_IO = atoi(globs->txt_disco),
+                .tempo_cpu_const = atoi(globs->txt_cpu),
+                .tempo_io_const = atoi(globs->txt_disco),
                 .quant_rodadas = atoi(globs->txt_rodada),
                 .ativo = true,
             };

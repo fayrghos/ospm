@@ -9,6 +9,8 @@ typedef struct {
     int tempo_de_IO;
     int quant_rodadas;
     bool ativo;
+    int tempo_cpu_const;
+    int tempo_io_const;
 } Processo;
 
 typedef struct No {

@@ -6,6 +6,8 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/color.h>
 
+int aux = 0;
+
 void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
 
     // Retângulo exterior
@@ -17,17 +19,17 @@ void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
   
     // Processos: Exec e IO
     // Exec
-    int aux = 0;
+    
     for (int i = 0; i < os->total_exec; i++) {
         float y_base = (ALTURA/2)+(ALTURA/4)-75;
-        int tempo = aux*os->so_info.quantum;
+        
     
         if(i % 2 == 0) {
             al_draw_textf(fonte, al_map_rgb(255, 255, 255), 
-            os->grad_exec[i].x1, y_base-50, 0, " t: %d ", tempo);
+            os->grad_exec[i].x1, y_base-50, 0, " t: %d ", os->grad_exec[i].tempo_processo);
         } else {
             al_draw_textf(fonte, al_map_rgb(255, 255, 255), 
-        os->grad_exec[i].x1, y_base+50, 0, " t: %d ", tempo);
+        os->grad_exec[i].x1, y_base+50, 0, " t: %d ", os->grad_exec[i].tempo_processo);
         }
         al_draw_filled_rectangle(
             os->grad_exec[i].x0,
@@ -45,20 +47,21 @@ void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
             al_map_rgb(0, 0, 0),
             1
         );
-        aux++;
+        
     }
     //IO
     for (int i = 0; i < os->total_IO; i++) {
         float y_base = (ALTURA/2)+(ALTURA/4)+75;
         int tempo = aux*os->so_info.quantum;
-    
+
         if(i % 2 == 0) {
             al_draw_textf(fonte, al_map_rgb(255, 255, 255), 
-        os->grad_io[i].x1, (y_base-50), 0, "t: %d", tempo);
-        }else {
+            os->grad_io[i].x1, y_base-50, 0, " t: %d ", os->grad_io[i].tempo_processo);
+        } else {
             al_draw_textf(fonte, al_map_rgb(255, 255, 255), 
-        os->grad_io[i].x1, (y_base+50), 0, "t: %d", tempo);
+        os->grad_io[i].x1, y_base+50, 0, " t: %d ", os->grad_io[i].tempo_processo);
         }
+        
         
         al_draw_filled_rectangle(
             os->grad_io[i].x0,
@@ -76,7 +79,6 @@ void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
             al_map_rgb(0, 0, 0),
             1
         );
-        aux++;
     }
 }
 
@@ -88,6 +90,7 @@ void exec(Globais *os) {
 
     int quantum = os->so_info.quantum;
     Processo finalizado;
+    Processo saida;
 
     // Loop principal do programa
     if (os->so_info.tempo_total > 0) {
@@ -107,19 +110,22 @@ void exec(Globais *os) {
             os->grad_exec[k].fila = 0;
             os->grad_exec[k].cor = atual->processo.cor;
             os->grad_exec[k].x0 = os->larg_x_exec;
+            os->grad_exec[k].tempo_processo = aux*quantum;
             os->grad_exec[k].x1 = os->larg_x_exec + larg_real;
 
             os->larg_x_exec += larg_real;
             os->total_exec++;
 
-            if (atual->processo.tempo_de_cpu == 0 ||
-                atual->processo.quant_rodadas == 0) {
+            atual->processo.tempo_de_cpu -= quantum;
+            if (atual->processo.tempo_de_cpu == 0 &&
+                atual->processo.quant_rodadas != 0) {
                 atual->processo.ativo = false;
                 finalizado = remover_fila(&os->so_info.fila_exec);
                 if (atual->processo.tempo_de_IO != 0) {
-                    os->larg_x_IO = os->larg_x_exec-10;
+                    os->larg_x_IO = os->larg_x_exec;
                     inserir_fila(&os->so_info.fila_IO, finalizado);
                 }
+                
             } else if (atual->processo.tempo_de_cpu - quantum < 0) {
                 if (atual->prox_no != NULL) {
                     atual->processo.ativo = false;
@@ -127,13 +133,13 @@ void exec(Globais *os) {
                         atual->processo.tempo_de_cpu - quantum;
                 }
                 finalizado = remover_fila(&os->so_info.fila_exec);
-                if (atual->processo.tempo_de_IO!= 0) {
+                if (finalizado.tempo_de_IO != 0) {
                     os->larg_x_IO = os->larg_x_exec;
                     inserir_fila(&os->so_info.fila_IO, finalizado);
                 }
-            } else {
-                atual->processo.tempo_de_cpu -= quantum;
-                atual->processo.quant_rodadas--;
+            } else if(atual->processo.tempo_de_cpu > 0){ 
+                saida = remover_fila(&os->so_info.fila_exec);
+                inserir_fila(&os->so_info.fila_exec, saida);
             }
         }
 
@@ -155,27 +161,41 @@ void exec(Globais *os) {
             os->grad_io[j].fila = 1;
             os->grad_io[j].cor = atual_io->processo.cor;
             os->grad_io[j].x0 = os->larg_x_IO;
+            os->grad_io[j].tempo_processo = aux*quantum;
             os->grad_io[j].x1 = os->larg_x_IO + larg_real;
 
             os->larg_x_IO += larg_real;
             os->total_IO++;
 
-            if (atual_io->processo.tempo_de_IO == 0) {
+            if (atual_io->processo.tempo_de_IO == 0 &&
+                atual_io->processo.quant_rodadas != 0) {
                 atual_io->processo.ativo = false;
+                finalizado = remover_fila(&os->so_info.fila_IO);
+                finalizado.quant_rodadas--;
+                finalizado.tempo_de_cpu = finalizado.tempo_cpu_const;
+                finalizado.tempo_de_IO = finalizado.tempo_io_const;
+                inserir_fila(&os->so_info.fila_exec, finalizado);
+            
+            } else if(atual_io->processo.quant_rodadas == 0) {
                 remover_fila(&os->so_info.fila_IO);
-            } else if (atual_io->processo.tempo_de_IO - quantum < 0) {
+            } else if (atual_io->processo.tempo_de_IO - quantum < 0 &&
+                atual_io->processo.quant_rodadas != 0)  {
                 if (atual_io->prox_no != NULL) {
                     atual_io->processo.ativo = false;
                     atual_io->prox_no->processo.tempo_de_cpu +=
                         atual_io->processo.tempo_de_cpu - quantum;
                 }
                 atual_io->processo.ativo = false;
-                remover_fila(&os->so_info.fila_IO);
+                finalizado = remover_fila(&os->so_info.fila_IO);
+                finalizado.quant_rodadas--;
+                finalizado.tempo_de_cpu = finalizado.tempo_cpu_const;
+                finalizado.tempo_de_IO = finalizado.tempo_io_const;
+                inserir_fila(&os->so_info.fila_exec, finalizado);
             } else {
                 atual_io->processo.tempo_de_IO -= quantum;
-                atual_io->processo.quant_rodadas--;
             }
         }
+        aux++;
         os->so_info.tempo_total -= quantum;
     }
 }

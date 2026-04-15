@@ -13,6 +13,7 @@ typedef struct {
     float x0, x1;
     ALLEGRO_COLOR cor;
     int fila;
+    int tempo_processo;
 } Gradiente;
 
 typedef struct {
