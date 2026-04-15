@@ -7,14 +7,6 @@
 #include <allegro5/color.h>
 
 void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
-
-    // Retângulo exterior
-    float x0_ret = (30), x1_ret = (LARGURA-30),
-          y0_ret = (ALTURA/2)+30, y1_ret = (720 / 2) + 385;
-    al_draw_rectangle(
-        x0_ret, y0_ret, x1_ret, y1_ret, al_map_rgb(144, 144, 144), 8
-    );
-  
     // Processos: Exec e IO
     // Exec
     int aux = 0;
@@ -117,7 +109,7 @@ void exec(Globais *os) {
                 atual->processo.ativo = false;
                 finalizado = remover_fila(&os->so_info.fila_exec);
                 if (atual->processo.tempo_de_IO != 0) {
-                    os->larg_x_IO = os->larg_x_exec-10;
+                    os->larg_x_IO = os->larg_x_exec - 10;
                     inserir_fila(&os->so_info.fila_IO, finalizado);
                 }
             } else if (atual->processo.tempo_de_cpu - quantum < 0) {
@@ -181,7 +173,7 @@ void exec(Globais *os) {
 }
 
 void carregar_fila(Globais *os) {
-    for(int i = 0; i < os->q_processos; i++) {
+    for (int i = 0; i < os->q_processos; i++) {
         inserir_fila(&os->so_info.fila_exec, os->processos[i]);
     }
 }
