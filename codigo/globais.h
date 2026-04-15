@@ -61,6 +61,9 @@ typedef struct {
     char txt_cpu[30];
     char txt_disco[30];
     char txt_rodada[30];
+
+    Processo *graf_primeiro;
+    int graf_pagina_atual;
 } Globais;
 
 /*
