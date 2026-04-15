@@ -21,10 +21,12 @@ void _desenhar_processo(
     ALLEGRO_FONT *fonte,
     Globais globs
 ) {
+    // Painél do processo
     al_draw_filled_rounded_rectangle(
         x - 120, y - 130, x + 120, y + 130, 20, 20, al_map_rgb(52, 52, 54)
     );
 
+    // Círculo colorido
     al_draw_filled_circle(x, y - 35, 60, al_map_rgb(255, 255, 255));
     al_draw_filled_circle(
         x, y - 35, 56, traduzir_cor_proc(globs.ind_processo_atual % 10)
@@ -33,6 +35,7 @@ void _desenhar_processo(
     char proc_txt[30] = "";
     sprintf(proc_txt, "Processo %d", globs.ind_processo_atual + 1);
 
+    // Nome do processo
     al_draw_text(
         fonte,
         al_map_rgb(255, 255, 255),

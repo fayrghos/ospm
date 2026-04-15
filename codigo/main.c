@@ -37,6 +37,7 @@ int main(int argc, char *argv[]) {
     // --------------------------------------------------
     // Inicialização do Allegro
     // --------------------------------------------------
+
     if (!al_init()) {
         fprintf(stderr, "Não foi possível iniciar o Allegro.\n");
         exit(1);
@@ -53,6 +54,7 @@ int main(int argc, char *argv[]) {
     al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST);
     al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
     al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
+
     ALLEGRO_DISPLAY *tela = al_create_display(LARGURA, ALTURA);
     al_set_window_title(tela, "OSPM");
 
@@ -77,6 +79,7 @@ int main(int argc, char *argv[]) {
     // --------------------------------------------------
     // Carregamento de Materiais
     // --------------------------------------------------
+
     ALLEGRO_FONT *fonte18 =
         carregar_fonte("./materiais/fontes/LiberationSans.ttf", 18);
 
@@ -93,6 +96,7 @@ int main(int argc, char *argv[]) {
     // --------------------------------------------------
     // Controle do Programa
     // --------------------------------------------------
+
     Globais globs = {};
     Modificadores mods = {};
 
@@ -114,12 +118,7 @@ int main(int argc, char *argv[]) {
     }
 
     int frame_contagem = 0;
-    // Criar uma função de inicialização no futuro, mo pregues
     globs.larg_x_exec = 90;
-    globs.so_info.fila_exec.fim = NULL;
-    globs.so_info.fila_exec.inicio = NULL;
-    globs.so_info.fila_IO.fim = NULL;
-    globs.so_info.fila_IO.inicio = NULL;
 
     for (;;) {
         al_wait_for_event(fila, &ev);
@@ -182,9 +181,12 @@ int main(int argc, char *argv[]) {
     // --------------------------------------------------
     // Limpeza
     // --------------------------------------------------
+
     al_destroy_font(fonte18);
+    al_destroy_font(fonte32);
     al_destroy_font(fonte72);
 
+    al_destroy_bitmap(icone);
     al_destroy_bitmap(totem);
     al_destroy_bitmap(danael);
 
