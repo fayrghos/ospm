@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
     // Controle do Programa
     // --------------------------------------------------
 
-    Globais globs = {};
+    Globais globs = {.larg_x_exec = 90};
     Modificadores mods = {};
 
     // Configurações do modo rápido
@@ -116,9 +116,6 @@ int main(int argc, char *argv[]) {
         strcpy(globs.txt_disco, "3");
         strcpy(globs.txt_rodada, "2");
     }
-
-    int frame_contagem = 0;
-    globs.larg_x_exec = 90;
 
     for (;;) {
         al_wait_for_event(fila, &ev);
@@ -159,11 +156,11 @@ int main(int argc, char *argv[]) {
             desenhar_principal(fonte18);
             desenhar_linha_de_execucao(&globs, fonte18);
             if (ev.type == ALLEGRO_EVENT_TIMER) {
-                frame_contagem++;
+                globs.frame_contagem++;
 
-                if (frame_contagem >= 24) {
+                if (globs.frame_contagem >= 24) {
                     exec(&globs); // Execução do programa
-                    frame_contagem = 0;
+                    globs.frame_contagem = 0;
                 }
             }
 

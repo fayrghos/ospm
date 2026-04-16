@@ -46,6 +46,7 @@ typedef struct {
     char q_processos_txt[30];
     bool easter_egg;
     char txt_erro[200];
+    int frame_contagem;
 
     Gradiente grad_exec[80];
     Gradiente grad_io[80];
