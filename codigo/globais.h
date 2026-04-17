@@ -51,7 +51,10 @@ typedef struct {
     Gradiente grad_exec[80];
     Gradiente grad_io[80];
     SO so_info;
+
     Processo processos[20];
+    Processo processos_const[20];
+
     int total_exec;
     int total_IO;
     float larg_x_exec;
@@ -77,25 +80,9 @@ typedef struct {
     bool alt;
 } Modificadores;
 
-#define MAX_CORES 10
+#define MAX_CORES 5
 
 /*
- * Enumeração de cores reservada para processos.
+ * Transforma um ID de processo em sua respectiva cor no Allegro.
  */
-typedef enum {
-    C_VERMELHO,
-    C_VERDE,
-    C_AZUL,
-    C_CINZA,
-    C_LARANJA,
-    C_CIANO,
-    C_MAGENTA,
-    C_AMARELO,
-    C_MARROM,
-    C_PRETO
-} ECorProcesso;
-
-/*
- * Transforma um ECorProcesso em sua respectiva cor no Allegro.
- */
-ALLEGRO_COLOR traduzir_cor_proc(ECorProcesso cor);
+ALLEGRO_COLOR traduzir_cor(int cor);

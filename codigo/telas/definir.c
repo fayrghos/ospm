@@ -13,13 +13,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-void _desenhar_processo(
-    float x,
-    float y,
-    int id,
-    ECorProcesso cor,
-    ALLEGRO_FONT *fonte,
-    Globais globs
+static void desenhar_processo(
+    float x, float y, int id, int cor, ALLEGRO_FONT *fonte, Globais globs
 ) {
     // Painél do processo
     al_draw_filled_rounded_rectangle(
@@ -29,7 +24,7 @@ void _desenhar_processo(
     // Círculo colorido
     al_draw_filled_circle(x, y - 35, 60, al_map_rgb(255, 255, 255));
     al_draw_filled_circle(
-        x, y - 35, 56, traduzir_cor_proc(globs.ind_processo_atual % 10)
+        x, y - 35, 56, traduzir_cor(globs.ind_processo_atual % 10)
     );
 
     char proc_txt[30] = "";
@@ -95,7 +90,7 @@ void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
             }
 
             globs->processos[globs->ind_processo_atual] = (Processo){
-                .cor = traduzir_cor_proc(globs->ind_processo_atual),
+                .cor = traduzir_cor(globs->ind_processo_atual),
                 .tempo_de_cpu = atoi(globs->txt_cpu),
                 .tempo_de_IO = atoi(globs->txt_disco),
                 .tempo_cpu_const = atoi(globs->txt_cpu),
@@ -114,6 +109,13 @@ void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
             memset(globs->txt_rodada, 0, sizeof(globs->txt_rodada));
 
             if (globs->ind_processo_atual >= globs->q_processos) {
+
+                memcpy(
+                    globs->processos_const,
+                    globs->processos,
+                    sizeof(globs->processos)
+                );
+
                 globs->tela_atual = T_PRINCIPAL;
                 carregar_fila(globs);
                 return;
@@ -181,7 +183,7 @@ void desenhar_definicao(
         timer
     );
 
-    _desenhar_processo(300, ALTURA / 2, 1, 0, fonte_p, globs);
+    desenhar_processo(300, ALTURA / 2, 1, 0, fonte_p, globs);
 
     // Piscada do cursor
     if (globs.q_processos_txt[0] == '\0' &&

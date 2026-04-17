@@ -153,7 +153,7 @@ int main(int argc, char *argv[]) {
             break;
 
         case T_PRINCIPAL:
-            desenhar_principal(fonte18);
+            desenhar_principal(fonte18, fonte32, globs);
             desenhar_linha_de_execucao(&globs, fonte18);
             if (ev.type == ALLEGRO_EVENT_TIMER) {
                 globs.frame_contagem++;

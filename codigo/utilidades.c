@@ -1,6 +1,7 @@
 #include "globais.h"
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/color.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -121,5 +122,16 @@ void desenhar_botao(
         y - 40,
         ALLEGRO_ALIGN_CENTER,
         escrita
+    );
+}
+
+void desenhar_texto_cen(int x, int y, ALLEGRO_FONT *fonte, char *texto) {
+    al_draw_text(
+        fonte,
+        al_map_rgb(255, 255, 255),
+        x,
+        y - (al_get_font_line_height(fonte) / 2.0),
+        ALLEGRO_ALIGN_CENTER,
+        texto
     );
 }

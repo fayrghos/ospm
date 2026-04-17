@@ -36,3 +36,8 @@ void desenhar_botao(
     ALLEGRO_FONT *fonte_g,
     ALLEGRO_TIMER *timer
 );
+
+/*
+ * Desenha um texto centralizado em 'x, y'.
+ */
+void desenhar_texto_cen(int x, int y, ALLEGRO_FONT *fonte, char *texto);
