@@ -107,14 +107,17 @@ int main(int argc, char *argv[]) {
         al_close_video(intro);
 
         // Tela de inserção
-        strcpy(globs.q_processos_txt, "1");
+        strcpy(globs.q_processos_txt, "3");
         strcpy(globs.so_info.txt_quantum, "2");
         strcpy(globs.so_info.txt_tempo_total, "64");
 
-        // Tela de definição
+        // Primeiro processo
         strcpy(globs.txt_cpu, "5");
         strcpy(globs.txt_disco, "3");
         strcpy(globs.txt_rodada, "2");
+
+        // Pro resto do programa
+        globs.modo_rapido = true;
     }
 
     for (;;) {

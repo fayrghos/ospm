@@ -170,6 +170,6 @@ void desenhar_principal(
         LARGURA - 90,
         (ALTURA / 2) + (ALTURA / 4) + 35,
         ALLEGRO_ALIGN_RIGHT,
-        "Linha de IO"
+        "Linha de Disco"
     );
 }

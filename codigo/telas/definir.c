@@ -108,8 +108,19 @@ void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
             memset(globs->txt_disco, 0, sizeof(globs->txt_disco));
             memset(globs->txt_rodada, 0, sizeof(globs->txt_rodada));
 
-            if (globs->ind_processo_atual >= globs->q_processos) {
+            if (globs->modo_rapido) {
+                sprintf(globs->txt_cpu, "%d", (rand() % 10) + 1);
 
+                sprintf(
+                    globs->txt_disco,
+                    "%d",
+                    rand() % 2 == 0 ? (rand() % 10) + 1 : 0
+                );
+
+                sprintf(globs->txt_rodada, "%d", (rand() % 5) + 1);
+            }
+
+            if (globs->ind_processo_atual >= globs->q_processos) {
                 memcpy(
                     globs->processos_const,
                     globs->processos,

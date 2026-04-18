@@ -48,6 +48,8 @@ typedef struct {
     char txt_erro[200];
     int frame_contagem;
 
+    bool modo_rapido;
+
     Gradiente grad_exec[80];
     Gradiente grad_io[80];
     SO so_info;
