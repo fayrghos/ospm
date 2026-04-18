@@ -36,7 +36,7 @@ void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs) {
             if (globs->q_processos > 20) {
                 strcpy(
                     globs->txt_erro,
-                    "A quantidade de processos não pode ser maior que 20."
+                    "A quantia de processos não pode ser maior que 20."
                 );
                 return;
             }

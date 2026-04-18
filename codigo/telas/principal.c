@@ -14,10 +14,19 @@
 static void
 desenhar_processo(int x, int y, ALLEGRO_FONT *fonte, int id, Globais globs) {
     al_draw_filled_circle(x, y, 30, al_map_rgb(255, 255, 255));
-    al_draw_filled_circle(x, y, 27, traduzir_cor(id));
+    al_draw_filled_circle(
+        x,
+        y,
+        27,
+        id < globs.ind_processo_atual ? traduzir_cor(id)
+                                      : al_map_rgb(50, 50, 50)
+    );
 
-    char id_txt[20];
-    sprintf(id_txt, "%d", id + 1);
+    char id_txt[20] = "";
+    if (id < globs.ind_processo_atual) {
+        sprintf(id_txt, "%d", id + 1);
+    }
+
     desenhar_texto_cen(x, y, fonte, id_txt);
 }
 
@@ -57,13 +66,13 @@ static void desenhar_tabela(
     }
 
     // Linhas
-    char cpu_txt[20];
-    char disco_txt[20];
-    char rodad_txt[20];
-
     desenhar_texto_cen(x + 82, y + 149, fonte_p, "CPU");
     desenhar_texto_cen(x + 82, y + 207, fonte_p, "Disco");
     desenhar_texto_cen(x + 82, y + 265, fonte_p, "Rodadas");
+
+    char cpu_txt[20];
+    char disco_txt[20];
+    char rodad_txt[20];
 
     for (int i = 0; i < 5; i++) {
         if (i >= globs.q_processos) {
@@ -74,12 +83,12 @@ static void desenhar_tabela(
             sprintf(
                 cpu_txt, "%d%s", globs.processos_const[i].tempo_de_cpu, "s"
             );
+
             sprintf(
                 disco_txt, "%d%s", globs.processos_const[i].tempo_de_IO, "s"
             );
-            sprintf(
-                rodad_txt, "%d%s", globs.processos_const[i].quant_rodadas, "s"
-            );
+
+            sprintf(rodad_txt, "%d", globs.processos_const[i].quant_rodadas);
         }
 
         desenhar_texto_cen(x + 200 + (i * 80), y + 149, fonte_p, cpu_txt);
