@@ -80,7 +80,7 @@ typedef struct {
     bool alt;
 } Modificadores;
 
-#define MAX_CORES 5
+#define MAX_CORES 10
 
 /*
  * Transforma um ID de processo em sua respectiva cor no Allegro.
