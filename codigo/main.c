@@ -98,7 +98,6 @@ int main(int argc, char *argv[]) {
     // --------------------------------------------------
 
     Globais globs = {.larg_x_exec = 90};
-    Modificadores mods = {};
 
     // Configurações do modo rápido
     if (argc > 1 && strcmp(argv[1], "--rapido") == 0) {
@@ -122,12 +121,12 @@ int main(int argc, char *argv[]) {
 
     for (;;) {
         al_wait_for_event(fila, &ev);
-        manusear_modificadores(ev, &mods);
+        manusear_modificadores(ev, &globs.mods);
 
         // Fechamento do programa
         if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE ||
-            mods.ctrl && (ev.keyboard.keycode == ALLEGRO_KEY_Q ||
-                          ev.keyboard.keycode == ALLEGRO_KEY_W)) {
+            globs.mods.ctrl && (ev.keyboard.keycode == ALLEGRO_KEY_Q ||
+                                ev.keyboard.keycode == ALLEGRO_KEY_W)) {
             break;
         }
 
@@ -156,6 +155,7 @@ int main(int argc, char *argv[]) {
             break;
 
         case T_PRINCIPAL:
+            manusear_principal(ev, &globs);
             desenhar_principal(fonte18, fonte32, globs);
             desenhar_linha_de_execucao(&globs, fonte18);
             if (ev.type == ALLEGRO_EVENT_TIMER) {

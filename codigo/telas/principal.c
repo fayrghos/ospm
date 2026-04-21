@@ -4,6 +4,8 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/color.h>
+#include <allegro5/events.h>
+#include <allegro5/keycodes.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -61,7 +63,11 @@ static void desenhar_tabela(
     // Bolinhas
     for (int i = 0; i < 5; i++) {
         desenhar_processo(
-            x + 181 + 20 + (i * 80), y + 33 + 28, fonte_m, i, globs
+            x + 181 + 20 + (i * 80),
+            y + 33 + 28,
+            fonte_m,
+            i + 5 * globs.ind_tabela_atual,
+            globs
         );
     }
 
@@ -75,20 +81,27 @@ static void desenhar_tabela(
     char rodad_txt[20];
 
     for (int i = 0; i < 5; i++) {
-        if (i >= globs.q_processos) {
+        int i_offs = i + 5 * globs.ind_tabela_atual;
+
+        if (i_offs >= globs.q_processos) {
             strcpy(cpu_txt, "–");
             strcpy(disco_txt, "–");
             strcpy(rodad_txt, "–");
         } else {
             sprintf(
-                cpu_txt, "%d%s", globs.processos_const[i].tempo_de_cpu, "s"
+                cpu_txt, "%d%s", globs.processos_const[i_offs].tempo_de_cpu, "s"
             );
 
             sprintf(
-                disco_txt, "%d%s", globs.processos_const[i].tempo_de_IO, "s"
+                disco_txt,
+                "%d%s",
+                globs.processos_const[i_offs].tempo_de_IO,
+                "s"
             );
 
-            sprintf(rodad_txt, "%d", globs.processos_const[i].quant_rodadas);
+            sprintf(
+                rodad_txt, "%d", globs.processos_const[i_offs].quant_rodadas
+            );
         }
 
         desenhar_texto_cen(x + 200 + (i * 80), y + 149, fonte_p, cpu_txt);
@@ -112,13 +125,14 @@ void desenhar_principal(
 
     desenhar_tabela(LARGURA / 4, ALTURA / 4, fonte_p, fonte_m, globs);
 
-    al_draw_text(
+    al_draw_textf(
         fonte_p,
         al_map_rgb(255, 255, 255),
         bd + 107,
         bd + 65,
         ALLEGRO_ALIGN_CENTER,
-        "Pág. 1"
+        "Pág. %d",
+        globs.ind_tabela_atual + 1
     );
 
     // --------------------------------------------------
@@ -172,4 +186,18 @@ void desenhar_principal(
         ALLEGRO_ALIGN_RIGHT,
         "Linha de Disco"
     );
+}
+
+void manusear_principal(ALLEGRO_EVENT ev, Globais *globs) {
+    if (ev.type == ALLEGRO_EVENT_KEY_DOWN &&
+        ev.keyboard.keycode == ALLEGRO_KEY_TAB) {
+        if (globs->mods.shift) {
+            rodar_inteiro(
+                0, globs->ind_maior_tabela, &globs->ind_tabela_atual, -1
+            );
+            return;
+        }
+
+        rodar_inteiro(0, globs->ind_maior_tabela, &globs->ind_tabela_atual, +1);
+    }
 }
