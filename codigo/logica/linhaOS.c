@@ -1,11 +1,11 @@
 #include "linhaOS.h"
+#include "../cores.h"
 #include "fila.h"
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/color.h>
-#include <stdio.h>
 
 int aux = 0;
 int tempo = 0;
@@ -21,7 +21,7 @@ void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
             if (i % 2 == 0) {
                 al_draw_textf(
                     fonte,
-                    al_map_rgb(255, 255, 255),
+                    COR_BRANCO,
                     os->grad_exec[i].x1,
                     y_base - 50,
                     0,
@@ -31,7 +31,7 @@ void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
             } else {
                 al_draw_textf(
                     fonte,
-                    al_map_rgb(255, 255, 255),
+                    COR_BRANCO,
                     os->grad_exec[i].x1,
                     y_base + 50,
                     0,
@@ -53,7 +53,7 @@ void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
                 y_base - 15,
                 os->grad_exec[i].x1,
                 y_base + 15,
-                al_map_rgb(0, 0, 0),
+                COR_PRETO,
                 1
             );
             if (os->grad_exec[i].x1 >= LARGURA - 110) {
@@ -78,7 +78,7 @@ void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
                 y_base - 15,
                 os->grad_io[i].x1,
                 y_base + 15,
-                al_map_rgb(0, 0, 0),
+                COR_PRETO,
                 1
             );
 
@@ -135,23 +135,21 @@ void exec(Globais *os) {
 
             atual->processo.tempo_de_cpu -= tempo_gasto;
 
-            if(atual->processo.tempo_de_cpu <= 0) {
+            if (atual->processo.tempo_de_cpu <= 0) {
                 atual->processo.ativo = false;
                 finalizado = remover_fila(&os->so_info.fila_exec);
 
-                if(finalizado.tempo_de_IO > 0) {
+                if (finalizado.tempo_de_IO > 0) {
                     inserir_fila(&os->so_info.fila_IO, finalizado);
-                }
-                else if(finalizado.quant_rodadas > 1){
+                } else if (finalizado.quant_rodadas > 1) {
                     finalizado.quant_rodadas--;
                     finalizado.tempo_de_cpu = finalizado.tempo_cpu_const;
                     inserir_fila(&os->so_info.fila_exec, finalizado);
-                } 
-                
-            } else if(atual->processo.tempo_de_cpu > 0) {
+                }
+
+            } else if (atual->processo.tempo_de_cpu > 0) {
                 saida = remover_fila(&os->so_info.fila_exec);
                 inserir_fila(&os->so_info.fila_exec, saida);
-
             }
         }
 
@@ -179,20 +177,17 @@ void exec(Globais *os) {
             os->total_IO++;
 
             atual_io->processo.tempo_de_IO -= tempo_gasto;
-            
-            if(atual_io->processo.tempo_de_IO <= 0) {
+
+            if (atual_io->processo.tempo_de_IO <= 0) {
                 finalizado = remover_fila(&os->so_info.fila_IO);
                 finalizado.quant_rodadas--;
 
-                if(finalizado.quant_rodadas > 0) {
+                if (finalizado.quant_rodadas > 0) {
                     finalizado.tempo_de_cpu = finalizado.tempo_cpu_const;
                     finalizado.tempo_de_IO = finalizado.tempo_io_const;
                     inserir_fila(&os->so_info.fila_exec, finalizado);
                 }
             }
-            
-            
-            
         }
         aux++;
         tempo++;

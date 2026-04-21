@@ -1,3 +1,4 @@
+#include "../cores.h"
 #include "../globais.h"
 #include "../logica/digitacao.h"
 #include "../logica/linhaOS.h"
@@ -18,11 +19,11 @@ static void desenhar_processo(
 ) {
     // Painél do processo
     al_draw_filled_rounded_rectangle(
-        x - 120, y - 130, x + 120, y + 130, 20, 20, al_map_rgb(52, 52, 54)
+        x - 120, y - 130, x + 120, y + 130, 20, 20, COR_CINZA
     );
 
     // Círculo colorido
-    al_draw_filled_circle(x, y - 35, 60, al_map_rgb(255, 255, 255));
+    al_draw_filled_circle(x, y - 35, 60, COR_BRANCO);
     al_draw_filled_circle(
         x, y - 35, 56, traduzir_cor(globs.ind_processo_atual % 10)
     );
@@ -31,14 +32,7 @@ static void desenhar_processo(
     sprintf(proc_txt, "Processo %d", globs.ind_processo_atual + 1);
 
     // Nome do processo
-    al_draw_text(
-        fonte,
-        al_map_rgb(255, 255, 255),
-        x,
-        y + 50,
-        ALLEGRO_ALIGN_CENTER,
-        proc_txt
-    );
+    al_draw_text(fonte, COR_BRANCO, x, y + 50, ALLEGRO_ALIGN_CENTER, proc_txt);
 }
 
 void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
@@ -201,7 +195,7 @@ void desenhar_definicao(
         al_get_timer_count(timer) % 20 <= 10) {
         al_draw_text(
             fonte_g,
-            al_map_rgb(255, 255, 255),
+            COR_BRANCO,
             LARGURA / 2,
             ALTURA / 2,
             ALLEGRO_ALIGN_CENTER,

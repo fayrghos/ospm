@@ -1,4 +1,5 @@
 #include "./logica/linhaOS.h"
+#include "cores.h"
 #include "globais.h"
 #include "logica/digitacao.h"
 #include "logica/modificadores.h"
@@ -137,7 +138,7 @@ int main(int argc, char *argv[]) {
         }
 
         // O fundo do programa vai ser sempre esse cinza
-        al_clear_to_color(al_map_rgb(29, 29, 32));
+        al_clear_to_color(COR_FUNDO);
 
         switch (globs.tela_atual) {
         case T_INTRO:

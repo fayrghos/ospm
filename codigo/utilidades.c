@@ -1,3 +1,4 @@
+#include "cores.h"
 #include "globais.h"
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
@@ -44,33 +45,16 @@ void rodar_inteiro(int min, int max, int *atual, int fator) {
 void desenhar_erros(char *titulo, ALLEGRO_FONT *fonte) {
     if (titulo[0] != '\0') {
         al_draw_filled_rounded_rectangle(
-            297,
-            ALTURA - 83,
-            LARGURA - 297,
-            ALTURA - 17,
-            15,
-            15,
-            al_map_rgb(237, 51, 59)
+            297, ALTURA - 83, LARGURA - 297, ALTURA - 17, 15, 15, COR_ERRO
         );
 
         al_draw_filled_rounded_rectangle(
-            300,
-            ALTURA - 80,
-            LARGURA - 300,
-            ALTURA - 20,
-            15,
-            15,
-            al_map_rgb(52, 52, 54)
+            300, ALTURA - 80, LARGURA - 300, ALTURA - 20, 15, 15, COR_CINZA
         );
     }
 
     al_draw_text(
-        fonte,
-        al_map_rgb(246, 97, 81),
-        LARGURA / 2,
-        ALTURA - 68,
-        ALLEGRO_ALIGN_CENTER,
-        titulo
+        fonte, COR_ERRO, LARGURA / 2, ALTURA - 68, ALLEGRO_ALIGN_CENTER, titulo
     );
 }
 
@@ -85,50 +69,31 @@ void desenhar_botao(
     ALLEGRO_TIMER *timer
 ) {
     al_draw_text(
-        fonte_p,
-        al_map_rgb(255, 255, 255),
-        x - 300,
-        y - 100,
-        ALLEGRO_ALIGN_LEFT,
-        titulo
+        fonte_p, COR_BRANCO, x - 300, y - 100, ALLEGRO_ALIGN_LEFT, titulo
     );
 
     if (selecionado) {
         al_draw_filled_rounded_rectangle(
-            x - 303, y - 53, x + 303, y + 53, 20, 20, al_map_rgb(222, 221, 218)
+            x - 303, y - 53, x + 303, y + 53, 20, 20, COR_SELECAO
         );
     }
 
     al_draw_filled_rounded_rectangle(
-        x - 300, y - 50, x + 300, y + 50, 20, 20, al_map_rgb(52, 52, 54)
+        x - 300, y - 50, x + 300, y + 50, 20, 20, COR_CINZA
     );
 
     if (selecionado && al_get_timer_count(timer) % 20 >= 10 &&
         escrita[0] == '\0') {
-        al_draw_text(
-            fonte_g,
-            al_map_rgb(255, 255, 255),
-            x,
-            y - 40,
-            ALLEGRO_ALIGN_CENTER,
-            "_"
-        );
+        al_draw_text(fonte_g, COR_BRANCO, x, y - 40, ALLEGRO_ALIGN_CENTER, "_");
     }
 
-    al_draw_text(
-        fonte_g,
-        al_map_rgb(255, 255, 255),
-        x,
-        y - 40,
-        ALLEGRO_ALIGN_CENTER,
-        escrita
-    );
+    al_draw_text(fonte_g, COR_BRANCO, x, y - 40, ALLEGRO_ALIGN_CENTER, escrita);
 }
 
 void desenhar_texto_cen(int x, int y, ALLEGRO_FONT *fonte, char *texto) {
     al_draw_text(
         fonte,
-        al_map_rgb(255, 255, 255),
+        COR_BRANCO,
         x,
         y - (al_get_font_line_height(fonte) / 2.0),
         ALLEGRO_ALIGN_CENTER,

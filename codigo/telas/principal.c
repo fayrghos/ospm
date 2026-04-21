@@ -1,3 +1,4 @@
+#include "../cores.h"
 #include "../globais.h"
 #include "../utilidades.h"
 #include <allegro5/allegro_font.h>
@@ -15,13 +16,9 @@
 
 static void
 desenhar_processo(int x, int y, ALLEGRO_FONT *fonte, int id, Globais globs) {
-    al_draw_filled_circle(x, y, 30, al_map_rgb(255, 255, 255));
+    al_draw_filled_circle(x, y, 30, COR_BRANCO);
     al_draw_filled_circle(
-        x,
-        y,
-        27,
-        id < globs.ind_processo_atual ? traduzir_cor(id)
-                                      : al_map_rgb(50, 50, 50)
+        x, y, 27, id < globs.ind_processo_atual ? traduzir_cor(id) : COR_CINZA
     );
 
     char id_txt[20] = "";
@@ -39,26 +36,18 @@ static void desenhar_tabela(
     y -= 292 / 2;
 
     // Barra princial
-    al_draw_filled_rectangle(x, y, x + 573, y + 118, al_map_rgb(84, 84, 84));
+    al_draw_filled_rectangle(x, y, x + 573, y + 118, COR_CLARO);
 
     // Barrinhas
     for (int i = 0; i < 3; i++) {
         al_draw_filled_rectangle(
-            x,
-            y + 123 + (i * 58),
-            x + 573,
-            y + 176 + (i * 58),
-            al_map_rgb(84, 84, 84)
+            x, y + 123 + (i * 58), x + 573, y + 176 + (i * 58), COR_CLARO
         );
     }
 
     // Paginador
-    al_draw_filled_rectangle(
-        x + 24, y + 25, x + 142, y + 93, al_map_rgb(255, 255, 255)
-    );
-    al_draw_filled_rectangle(
-        x + 27, y + 28, x + 139, y + 90, al_map_rgb(29, 29, 32)
-    );
+    al_draw_filled_rectangle(x + 24, y + 25, x + 142, y + 93, COR_BRANCO);
+    al_draw_filled_rectangle(x + 27, y + 28, x + 139, y + 90, COR_FUNDO);
 
     // Bolinhas
     for (int i = 0; i < 5; i++) {
@@ -120,14 +109,14 @@ void desenhar_principal(
     // --------------------------------------------------
 
     al_draw_filled_rectangle(
-        bd, bd, LARGURA / 2 - bd, ALTURA / 2 - bd, al_map_rgb(52, 52, 54)
+        bd, bd, LARGURA / 2 - bd, ALTURA / 2 - bd, COR_CINZA
     );
 
     desenhar_tabela(LARGURA / 4, ALTURA / 4, fonte_p, fonte_m, globs);
 
     al_draw_textf(
         fonte_p,
-        al_map_rgb(255, 255, 255),
+        COR_BRANCO,
         bd + 107,
         bd + 65,
         ALLEGRO_ALIGN_CENTER,
@@ -142,47 +131,39 @@ void desenhar_principal(
     static const short espaco = 75;
 
     al_draw_filled_rectangle(
-        bd, LHM + bd, LARGURA - bd, ALTURA - bd, al_map_rgb(15, 15, 15)
+        bd, LHM + bd, LARGURA - bd, ALTURA - bd, COR_CINZA
     );
 
-    al_draw_rectangle(
-        bd, LHM + bd, LARGURA - bd, ALTURA - bd, al_map_rgb(144, 144, 144), 5
+    al_draw_filled_rectangle(
+        bd + 15, LHM + bd + 15, LARGURA - bd - 15, ALTURA - bd - 15, COR_PRETO
     );
 
     // Linha de CPU
     al_draw_filled_rectangle(
-        bd * 3,
-        LHI - espaco - 3,
-        LARGURA - bd * 3,
-        LHI - espaco + 3,
-        al_map_rgb(100, 100, 100)
+        bd * 3, LHI - espaco - 3, LARGURA - bd * 3, LHI - espaco + 3, COR_CLARO
     );
 
     // Linha de IO
     al_draw_filled_rectangle(
-        bd * 3,
-        LHI + espaco - 3,
-        LARGURA - bd * 3,
-        LHI + espaco + 3,
-        al_map_rgb(100, 100, 100)
+        bd * 3, LHI + espaco - 3, LARGURA - bd * 3, LHI + espaco + 3, COR_CLARO
     );
 
     // Texto de CPU
     al_draw_text(
         fonte_p,
-        al_map_rgb(255, 255, 255),
-        LARGURA - 90,
-        (ALTURA / 2) + (ALTURA / 4) - 125,
+        COR_BRANCO,
+        LARGURA - bd * 3,
+        LHI - espaco - 40,
         ALLEGRO_ALIGN_RIGHT,
         "Linha de CPU"
     );
 
-    // Texto de IO
+    // Texto de Disco
     al_draw_text(
         fonte_p,
-        al_map_rgb(255, 255, 255),
-        LARGURA - 90,
-        (ALTURA / 2) + (ALTURA / 4) + 35,
+        COR_BRANCO,
+        LARGURA - bd * 3,
+        LHI + espaco - 40,
         ALLEGRO_ALIGN_RIGHT,
         "Linha de Disco"
     );
