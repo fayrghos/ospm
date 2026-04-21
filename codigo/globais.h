@@ -38,9 +38,20 @@ typedef enum {
 } ETela;
 
 /*
+ * Gerencia o suporte a combinações de teclado.
+ */
+typedef struct {
+    bool ctrl;
+    bool shift;
+    bool alt;
+} Modificadores;
+
+/*
  * Guarda as variáveis que são acessíveis no programa inteiro.
  */
 typedef struct {
+    Modificadores mods;
+
     ETela tela_atual;
     int q_processos;
     char q_processos_txt[30];
@@ -65,6 +76,8 @@ typedef struct {
 
     int ind_processo_atual;
     int ind_botao_atual;
+    int ind_tabela_atual;
+    int ind_maior_tabela;
 
     char txt_cpu[30];
     char txt_disco[30];
@@ -73,15 +86,6 @@ typedef struct {
     Processo *graf_primeiro;
     int graf_pagina_atual;
 } Globais;
-
-/*
- * Gerencia o suporte a combinações de teclado.
- */
-typedef struct {
-    bool ctrl;
-    bool shift;
-    bool alt;
-} Modificadores;
 
 #define MAX_CORES 10
 

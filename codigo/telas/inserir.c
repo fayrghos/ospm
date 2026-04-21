@@ -42,6 +42,12 @@ void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs) {
             }
 
             if (globs->q_processos > 0) {
+                for (int i = 1; i < globs->q_processos; i++) {
+                    if (i % 5 == 0) {
+                        globs->ind_maior_tabela++;
+                    }
+                }
+
                 globs->ind_botao_atual = 0;
                 globs->tela_atual = T_DEFINIR;
             }
