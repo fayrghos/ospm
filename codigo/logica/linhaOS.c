@@ -5,17 +5,18 @@
     #include <allegro5/allegro_primitives.h>
     #include <allegro5/allegro_ttf.h>
     #include <allegro5/color.h>
+    #include <stdio.h>
 
     int aux = 0;
 
     void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
         // Processos: Exec e IO
         // Exec
-        
-        for (int i = 0; i < os->total_exec; i++) {
+        static int flip = 0;
+        if(!flip) {
+            for (int i = 0; i < os->total_exec; i++) {
             float y_base = (ALTURA/2)+(ALTURA/4)-75;
             
-        
             if(i % 2 == 0) {
                 al_draw_textf(fonte, al_map_rgb(255, 255, 255), 
                 os->grad_exec[i].x1, y_base-50, 0, " t: %d ", os->grad_exec[i].tempo_processo);
@@ -39,6 +40,10 @@
                 al_map_rgb(0, 0, 0),
                 1
             );
+            if(os->grad_exec[i].x1 >= LARGURA-30) {
+                flip = 1;
+                continue;
+            }
             
         }
         //IO
@@ -53,6 +58,7 @@
                 al_draw_textf(fonte, al_map_rgb(255, 255, 255), 
             os->grad_io[i].x1, y_base+50, 0, " t: %d ", os->grad_io[i].tempo_processo);
             }
+
             
             
             al_draw_filled_rectangle(
@@ -70,7 +76,22 @@
                 y_base + 15,
                 al_map_rgb(0, 0, 0),
                 1
-            );
+                );
+
+                if(os->grad_io[i].x1 >= LARGURA-30) {
+                flip = 1;
+                continue;
+                }
+
+            }
+            
+        } else {
+            os->total_exec = 0;
+            os->total_IO = 0;
+         // Ponto inicial na esquerda
+            os->larg_x_IO = 0;
+            os->larg_x_exec = 90;
+            flip = 0;
         }
     }
 
