@@ -61,6 +61,7 @@ typedef struct {
     int total_IO;
     float larg_x_exec;
     float larg_x_IO;
+    int pivo;
 
     int ind_processo_atual;
     int ind_botao_atual;
