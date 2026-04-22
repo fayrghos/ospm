@@ -140,6 +140,36 @@ void desenhar_principal(
         COR_CLARO
     );
 
+    al_draw_textf(
+        fonte_p,
+        COR_BRANCO,
+        LARGURA / 2 + 2 * bd,
+        bd * 2,
+        0,
+        "Uso CPU: %.2f%%",
+        globs.so_info.uso_cpu * 100
+    );
+
+    al_draw_textf(
+        fonte_p,
+        COR_BRANCO,
+        LARGURA / 2 + 2 * bd,
+        bd * 3,
+        0,
+        "Méd. Espera: %.1fs",
+        0.0
+    );
+
+    al_draw_textf(
+        fonte_p,
+        COR_BRANCO,
+        LARGURA / 2 + 2 * bd,
+        bd * 4,
+        0,
+        "Finalizados: %d",
+        0
+    );
+
     // --------------------------------------------------
     // Gráfico
     // --------------------------------------------------
@@ -186,6 +216,9 @@ void desenhar_principal(
 }
 
 void manusear_principal(ALLEGRO_EVENT ev, Globais *globs) {
+    globs->so_info.uso_cpu =
+        (float)globs->total_exec_analise / globs->q_processos;
+
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN &&
         ev.keyboard.keycode == ALLEGRO_KEY_TAB) {
         if (globs->mods.shift) {
