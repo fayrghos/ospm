@@ -41,7 +41,7 @@ void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs) {
                 );
                 return;
             }
-
+            
             if (globs->q_processos > 0) {
                 for (int i = 1; i < globs->q_processos; i++) {
                     if (i % 5 == 0) {

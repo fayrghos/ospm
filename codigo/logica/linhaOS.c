@@ -122,29 +122,37 @@ void exec(Globais *os) {
                 tempo_gasto = atual->processo.tempo_de_cpu;
             }
 
-            float larg_real = 10 * tempo_gasto;
             int margem = 90;
             int k = os->total_exec;
             os->grad_exec[k].fila = 0;
             os->grad_exec[k].cor = atual->processo.cor;
-            os->grad_exec[k].x0 = margem + (aux * quantum) * 20;
             os->grad_exec[k].tempo_processo = tempo * quantum;
-            os->grad_exec[k].x1 = os->grad_exec[k].x0 + (tempo_gasto * 20);
+            if(k == 0) {
+                os->grad_exec[k].x0 = margem;
+            }else {
+                os->grad_exec[k].x0 = os->grad_exec[k-1].x1 + 5;
+            }
+
+            float larg_final = ((float)tempo_gasto/quantum) * os->escala;
+            os->grad_exec[k].x1 = os->grad_exec[k].x0 + larg_final;
 
             os->total_exec++;
-            os->total_exec_analise++;
+            
 
             atual->processo.tempo_de_cpu -= tempo_gasto;
 
             if (atual->processo.tempo_de_cpu <= 0) {
                 atual->processo.ativo = false;
                 finalizado = remover_fila(&os->so_info.fila_exec);
+                os->total_exec_analise--;
 
                 if (finalizado.tempo_de_IO > 0) {
+                    os->total_io_analise++;
                     inserir_fila(&os->so_info.fila_IO, finalizado);
                 } else if (finalizado.quant_rodadas > 1) {
                     finalizado.quant_rodadas--;
                     finalizado.tempo_de_cpu = finalizado.tempo_cpu_const;
+                    os->total_io_analise++;
                     inserir_fila(&os->so_info.fila_exec, finalizado);
                 }
 
@@ -165,33 +173,36 @@ void exec(Globais *os) {
                 tempo_gasto = atual_io->processo.tempo_de_IO;
             }
 
-            float larg_real = 10 * tempo_gasto;
-
             int j = os->total_IO;
+            int k = os->total_exec;
             int margem = 90;
             os->grad_io[j].fila = 1;
             os->grad_io[j].cor = atual_io->processo.cor;
-            os->grad_io[j].x0 = margem + (aux * quantum) * 20;
             os->grad_io[j].tempo_processo = tempo * quantum;
-            os->grad_io[j].x1 = os->grad_io[j].x0 + (tempo_gasto * 20);
+
+            if(j == 0) {
+                if(k > 0) os->grad_io[j].x0 = os->grad_exec[k-1].x1;
+                else os->grad_io[j].x0 = 90;
+            }else {
+                os->grad_io[j].x0 = os->grad_io[j-1].x1 + 5;
+            }
+
+            float larg_final = ((float)tempo_gasto/quantum) * os->escala;
+            os->grad_io[j].x1 = os->grad_io[j].x0 + larg_final;
 
             os->total_IO++;
-            os->total_io_analise++;
 
             atual_io->processo.tempo_de_IO -= tempo_gasto;
 
             if (atual_io->processo.tempo_de_IO <= 0) {
                 finalizado = remover_fila(&os->so_info.fila_IO);
+                os->total_io_analise--;
                 finalizado.quant_rodadas--;
 
                 if (finalizado.quant_rodadas > 0) {
                     finalizado.tempo_de_cpu = finalizado.tempo_cpu_const;
                     finalizado.tempo_de_IO = finalizado.tempo_io_const;
                     inserir_fila(&os->so_info.fila_exec, finalizado);
-                }
-                else {
-                    os->total_exec_analise--;
-                    os->total_io_analise--;
                 }
             }
         }
@@ -203,6 +214,8 @@ void exec(Globais *os) {
 
 void carregar_fila(Globais *os) {
     for (int i = 0; i < os->q_processos; i++) {
+        os->total_exec_analise++;
         inserir_fila(&os->so_info.fila_exec, os->processos[i]);
     }
 }
+

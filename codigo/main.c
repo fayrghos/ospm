@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
     // Controle do Programa
     // --------------------------------------------------
 
-    Globais globs = {};
+    Globais globs = {.escala = 60};
 
     globs.audio = al_load_sample("./materiais/imagens/daniel.wav");
     al_reserve_samples(1);

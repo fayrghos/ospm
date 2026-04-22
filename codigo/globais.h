@@ -81,6 +81,7 @@ typedef struct {
     int ind_botao_atual;
     int ind_tabela_atual;
     int ind_maior_tabela;
+    float escala;
 
     char txt_cpu[30];
     char txt_disco[30];

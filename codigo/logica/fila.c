@@ -8,6 +8,7 @@ void inserir_fila(Fila *fila, Processo p) {
     No * novo_no = (No*)malloc(sizeof(No));
     novo_no->processo = p;
     novo_no->prox_no = NULL;
+    
     if(isempty(fila)) {
         fila->fim = novo_no;
         fila->inicio = novo_no;
