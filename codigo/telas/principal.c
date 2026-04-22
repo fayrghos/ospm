@@ -108,6 +108,7 @@ void desenhar_principal(
     // Tabela
     // --------------------------------------------------
 
+    // Fundo
     al_draw_filled_rectangle(
         bd, bd, LARGURA / 2 - bd, ALTURA / 2 - bd, COR_CINZA
     );
@@ -128,10 +129,12 @@ void desenhar_principal(
     // Tabelinha
     // --------------------------------------------------
 
+    // Fundo
     al_draw_filled_rectangle(
         LARGURA / 2 + bd, bd, LARGURA / 2 + 300, LHM - bd, COR_CINZA
     );
 
+    // Placa
     al_draw_filled_rectangle(
         LARGURA / 2 + bd + 20,
         bd + 15,
@@ -140,33 +143,45 @@ void desenhar_principal(
         COR_CLARO
     );
 
+    // Uso de CPU
+    al_draw_text(
+        fonte_p, COR_BRANCO, LARGURA / 2 + 2 * bd, bd * 2, 0, "· Uso CPU"
+    );
     al_draw_textf(
         fonte_p,
         COR_BRANCO,
-        LARGURA / 2 + 2 * bd,
+        LARGURA / 2 + 293 - bd,
         bd * 2,
-        0,
-        "Uso CPU: %.1f%%",
+        ALLEGRO_ALIGN_RIGHT,
+        "%.1f%%",
         globs.so_info.uso_cpu * 100
     );
 
+    // Média de Espera
+    al_draw_text(
+        fonte_p, COR_BRANCO, LARGURA / 2 + 2 * bd, bd * 3, 0, "· Média Espera"
+    );
     al_draw_textf(
         fonte_p,
         COR_BRANCO,
-        LARGURA / 2 + 2 * bd,
+        LARGURA / 2 + 293 - bd,
         bd * 3,
-        0,
-        "Méd. Espera: %.1fs",
+        ALLEGRO_ALIGN_RIGHT,
+        "%.1fs",
         0.0
     );
 
+    // Finalizados
+    al_draw_text(
+        fonte_p, COR_BRANCO, LARGURA / 2 + 2 * bd, bd * 4, 0, "· Finalizados"
+    );
     al_draw_textf(
         fonte_p,
         COR_BRANCO,
-        LARGURA / 2 + 2 * bd,
+        LARGURA / 2 + 293 - bd,
         bd * 4,
-        0,
-        "Finalizados: %d",
+        ALLEGRO_ALIGN_RIGHT,
+        "%d",
         0
     );
 
