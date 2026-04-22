@@ -146,7 +146,7 @@ void desenhar_principal(
         LARGURA / 2 + 2 * bd,
         bd * 2,
         0,
-        "Uso CPU: %.2f%%",
+        "Uso CPU: %.1f%%",
         globs.so_info.uso_cpu * 100
     );
 
@@ -217,7 +217,9 @@ void desenhar_principal(
 
 void manusear_principal(ALLEGRO_EVENT ev, Globais *globs) {
     globs->so_info.uso_cpu =
-        (float)globs->total_exec_analise / globs->q_processos;
+        globs->so_info.tempo_total > 0
+            ? (float)globs->total_exec_analise / globs->q_processos
+            : 0;
 
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN &&
         ev.keyboard.keycode == ALLEGRO_KEY_TAB) {
