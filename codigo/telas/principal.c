@@ -125,6 +125,22 @@ void desenhar_principal(
     );
 
     // --------------------------------------------------
+    // Tabelinha
+    // --------------------------------------------------
+
+    al_draw_filled_rectangle(
+        LARGURA / 2 + bd, bd, LARGURA / 2 + 300, LHM - bd, COR_CINZA
+    );
+
+    al_draw_filled_rectangle(
+        LARGURA / 2 + bd + 20,
+        bd + 15,
+        LARGURA / 2 + 280,
+        LHM - bd - 15,
+        COR_CLARO
+    );
+
+    // --------------------------------------------------
     // Gráfico
     // --------------------------------------------------
 
