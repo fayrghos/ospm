@@ -9,6 +9,7 @@
 
 int aux = 0;
 int tempo = 0;
+int salva = 0;
 
 void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
     // Processos: Exec e IO
@@ -82,7 +83,7 @@ void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
                 1
             );
 
-            if (os->grad_io[i].x1 >= LARGURA - 110) {
+            if (os->grad_io[i].x1 >= LARGURA - 90) {
                 flip = 1;
                 continue;
             }
@@ -143,22 +144,20 @@ void exec(Globais *os) {
 
             if (atual->processo.tempo_de_cpu <= 0) {
                 atual->processo.ativo = false;
-                finalizado = remover_fila(&os->so_info.fila_exec);
-                os->total_exec_analise--;
+                finalizado = remover_fila(&os->so_info.fila_exec, &os->total_exec_analise);
+                
 
                 if (finalizado.tempo_de_IO > 0) {
-                    os->total_io_analise++;
-                    inserir_fila(&os->so_info.fila_IO, finalizado);
+                    inserir_fila(&os->so_info.fila_IO, finalizado, &os->total_io_analise);
                 } else if (finalizado.quant_rodadas > 1) {
                     finalizado.quant_rodadas--;
                     finalizado.tempo_de_cpu = finalizado.tempo_cpu_const;
-                    os->total_io_analise++;
-                    inserir_fila(&os->so_info.fila_exec, finalizado);
+                    inserir_fila(&os->so_info.fila_exec, finalizado, &os->total_exec_analise);
                 }
 
             } else if (atual->processo.tempo_de_cpu > 0) {
-                saida = remover_fila(&os->so_info.fila_exec);
-                inserir_fila(&os->so_info.fila_exec, saida);
+                saida = remover_fila(&os->so_info.fila_exec, &os->total_exec_analise);
+                inserir_fila(&os->so_info.fila_exec, saida, &os->total_exec_analise);
             }
         }
 
@@ -195,15 +194,17 @@ void exec(Globais *os) {
             atual_io->processo.tempo_de_IO -= tempo_gasto;
 
             if (atual_io->processo.tempo_de_IO <= 0) {
-                finalizado = remover_fila(&os->so_info.fila_IO);
-                os->total_io_analise--;
+                finalizado = remover_fila(&os->so_info.fila_IO, &os->total_io_analise);
+    
                 finalizado.quant_rodadas--;
 
                 if (finalizado.quant_rodadas > 0) {
                     finalizado.tempo_de_cpu = finalizado.tempo_cpu_const;
                     finalizado.tempo_de_IO = finalizado.tempo_io_const;
-                    inserir_fila(&os->so_info.fila_exec, finalizado);
+                    
+                    inserir_fila(&os->so_info.fila_exec, finalizado ,&os->total_exec_analise);
                 }
+                
             }
         }
         aux++;
@@ -214,8 +215,7 @@ void exec(Globais *os) {
 
 void carregar_fila(Globais *os) {
     for (int i = 0; i < os->q_processos; i++) {
-        os->total_exec_analise++;
-        inserir_fila(&os->so_info.fila_exec, os->processos[i]);
+        inserir_fila(&os->so_info.fila_exec, os->processos[i], &os->total_exec_analise);
     }
 }
 

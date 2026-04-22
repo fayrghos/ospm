@@ -23,7 +23,7 @@ typedef struct {
     No *fim;
 } Fila;
 
-void inserir_fila(Fila *fila, Processo p);
-Processo remover_fila(Fila *fila);
+void inserir_fila(Fila *fila, Processo p, int *cont);
+Processo remover_fila(Fila *fila, int *cont);
 int isempty(Fila *fila);
 No *pegar_inicio(Fila *fila);

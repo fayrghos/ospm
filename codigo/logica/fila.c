@@ -4,11 +4,11 @@
 #include "fila.h"
 
 
-void inserir_fila(Fila *fila, Processo p) {
+void inserir_fila(Fila *fila, Processo p, int *cont) {
     No * novo_no = (No*)malloc(sizeof(No));
     novo_no->processo = p;
     novo_no->prox_no = NULL;
-    
+    (*cont)++;   
     if(isempty(fila)) {
         fila->fim = novo_no;
         fila->inicio = novo_no;
@@ -17,11 +17,12 @@ void inserir_fila(Fila *fila, Processo p) {
         fila->fim = novo_no;
     }
 }
-Processo remover_fila(Fila *fila) {
+Processo remover_fila(Fila *fila, int *cont) {
     if(isempty(fila)) {
         Processo vazio = {0};
         return vazio; 
     } else {
+        (*cont)--;
         if(fila->inicio->prox_no == NULL) {
             No * temp = fila->inicio;
             Processo p = temp->processo;
