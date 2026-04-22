@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) {
         // Desenha a caixa de erros, se possível
         desenhar_erros(globs.txt_erro, fonte32);
 
-        if (ev.type == ALLEGRO_EVENT_TIMER) {
+        if (ev.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(fila)) {
             al_flip_display();
         }
     }
