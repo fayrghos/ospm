@@ -1,6 +1,7 @@
 #include "../globais.h"
 #include "../logica/digitacao.h"
 #include "../utilidades.h"
+#include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/bitmap.h>
@@ -55,6 +56,7 @@ void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs) {
 
         if (ev.keyboard.keycode == ALLEGRO_KEY_D) {
             globs->easter_egg = true;
+            al_play_sample(globs->audio, 2, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
         }
     }
 

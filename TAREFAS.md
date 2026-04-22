@@ -10,12 +10,12 @@
 
 ## Regras
 
-- [ ] Os processos devem ser organizados em uma fila circular (FIFO)
-- [ ] Cada processo executa por no máximo o quantum definido
-- [ ] Se terminar antes do quantum, sai da CPU
-- [ ] Se não terminar, volta ao final da fila
-- [ ] Processos que entram em E/S devem ir para uma fila de espera e retornar depois
-- [ ] A simulação deve ocorrer em unidades discretas de tempo
+- [X] Os processos devem ser organizados em uma fila circular (FIFO)
+- [X] Cada processo executa por no máximo o quantum definido
+- [X] Se terminar antes do quantum, sai da CPU
+- [X] Se não terminar, volta ao final da fila
+- [X] Processos que entram em E/S devem ir para uma fila de espera e retornar depois
+- [X] A simulação deve ocorrer em unidades discretas de tempo
 
 ## Saídas
 

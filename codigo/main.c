@@ -14,6 +14,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_video.h>
 #include <allegro5/altime.h>
@@ -34,6 +35,7 @@
 #include <string.h>
 #include <unistd.h>
 
+
 int main(int argc, char *argv[]) {
     // --------------------------------------------------
     // Inicialização do Allegro
@@ -51,6 +53,8 @@ int main(int argc, char *argv[]) {
     al_init_primitives_addon();
     al_init_image_addon();
     al_init_video_addon();
+    al_install_audio();
+    al_init_acodec_addon();
 
     al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST);
     al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
@@ -98,7 +102,10 @@ int main(int argc, char *argv[]) {
     // Controle do Programa
     // --------------------------------------------------
 
-    Globais globs = {.larg_x_exec = 90};
+    Globais globs = {};
+
+    globs.audio = al_load_sample("./materiais/imagens/daniel.wav");
+    al_reserve_samples(1);
 
     // Configurações do modo rápido
     if (argc > 1 && strcmp(argv[1], "--rapido") == 0) {

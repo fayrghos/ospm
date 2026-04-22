@@ -132,6 +132,7 @@ void exec(Globais *os) {
             os->grad_exec[k].x1 = os->grad_exec[k].x0 + (tempo_gasto * 20);
 
             os->total_exec++;
+            os->total_exec_analise++;
 
             atual->processo.tempo_de_cpu -= tempo_gasto;
 
@@ -175,6 +176,7 @@ void exec(Globais *os) {
             os->grad_io[j].x1 = os->grad_io[j].x0 + (tempo_gasto * 20);
 
             os->total_IO++;
+            os->total_io_analise++;
 
             atual_io->processo.tempo_de_IO -= tempo_gasto;
 
@@ -186,6 +188,10 @@ void exec(Globais *os) {
                     finalizado.tempo_de_cpu = finalizado.tempo_cpu_const;
                     finalizado.tempo_de_IO = finalizado.tempo_io_const;
                     inserir_fila(&os->so_info.fila_exec, finalizado);
+                }
+                else {
+                    os->total_exec_analise--;
+                    os->total_io_analise--;
                 }
             }
         }

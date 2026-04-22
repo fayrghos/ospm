@@ -2,6 +2,7 @@
 
 #include "logica/fila.h"
 #include <allegro5/color.h>
+#include <allegro5/allegro_audio.h>
 #include <stdbool.h>
 
 // Por algum motivo, o clang-tidy reclama quando isso é int
@@ -73,6 +74,8 @@ typedef struct {
     float larg_x_exec;
     float larg_x_IO;
     int pivo;
+    int total_io_analise;
+    int total_exec_analise;
 
     int ind_processo_atual;
     int ind_botao_atual;
@@ -85,6 +88,7 @@ typedef struct {
 
     Processo *graf_primeiro;
     int graf_pagina_atual;
+    ALLEGRO_SAMPLE *audio;
 } Globais;
 
 #define MAX_CORES 10
