@@ -26,7 +26,7 @@ void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
                     os->grad_exec[i].x1,
                     y_base - 50,
                     0,
-                    " t: %d ",
+                    "%d",
                     os->grad_exec[i].tempo_processo
                 );
             } else {
@@ -36,7 +36,7 @@ void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
                     os->grad_exec[i].x1,
                     y_base + 50,
                     0,
-                    " t: %d ",
+                    "%d",
                     os->grad_exec[i].tempo_processo
                 );
             }
@@ -65,6 +65,29 @@ void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
         // IO
         for (int i = 0; i < os->total_IO; i++) {
             float y_base = (ALTURA / 2) + (ALTURA / 4) + 75;
+
+             if (i % 2 == 0) {
+                al_draw_textf(
+                    fonte,
+                    COR_BRANCO,
+                    os->grad_io[i].x0,
+                    y_base - 50,
+                    0,
+                    "%d",
+                    os->grad_io[i].tempo_processo
+                );
+            } else {
+                al_draw_textf(
+                    fonte,
+                    COR_BRANCO,
+                    os->grad_io[i].x0,
+                    y_base + 50,
+                    0,
+                    "%d",
+                    os->grad_io[i].tempo_processo
+                );
+            }
+
 
             al_draw_filled_rectangle(
                 os->grad_io[i].x0,
@@ -133,7 +156,6 @@ void exec(Globais *os) {
             int margem = 90;
             //Indica qual o processo da vez para definir os valores pro desenho
             int k = os->total_exec;
-            os->grad_exec[k].fila = 0; //não lembro o pq tá aqui 
             os->grad_exec[k].cor = atual->processo.cor;
             os->grad_exec[k].tempo_processo = tempo * quantum; //Definição do tempo para desenho (0, 4 , 8)
             //Tudo em função do quantum
@@ -160,18 +182,21 @@ void exec(Globais *os) {
             if (atual->processo.tempo_de_cpu <= 0) {
                 atual->processo.ativo = false;
                 finalizado = remover_fila(&os->so_info.fila_exec, &os->total_exec_analise);
+                if(finalizado.tempo_de_IO == 0) finalizado.quant_rodadas--;
                 
+                if (finalizado.quant_rodadas == 0) {
+                        os->processos_finalizados++;
+                }
                 //Se ele tiver trabalho de IO é enviado para linha de IO
                 if (finalizado.tempo_de_IO > 0) {
                     inserir_fila(&os->so_info.fila_IO, finalizado, &os->total_io_analise);
 
-                } else if (finalizado.quant_rodadas > 1) {
+                } else if (finalizado.quant_rodadas >= 1) {
                     //Caso não tenha mais ainda se tem rodada se decrementa a rodada
                     //e reseta o modo de cpu
-                    finalizado.quant_rodadas--;
                     finalizado.tempo_de_cpu = finalizado.tempo_cpu_const;
                     inserir_fila(&os->so_info.fila_exec, finalizado, &os->total_exec_analise);
-                }
+                } 
 
             } else if (atual->processo.tempo_de_cpu > 0) {
                 //Caso ainda não tenha zerado se manda para o final da fila e abre espaço para o próximo processo
@@ -220,14 +245,16 @@ void exec(Globais *os) {
                 finalizado = remover_fila(&os->so_info.fila_IO, &os->total_io_analise);
                 //O processo é removido da fila e a quantidade de rodadas é descontado
                 finalizado.quant_rodadas--;
+                if(finalizado.quant_rodadas == 0) {
+                    os->processos_finalizados++;
+                }
 
                 if (finalizado.quant_rodadas > 0) {
                     //Se ainda não acabou ele retorna a fila de execução e se reseta o tempo de IO
                     finalizado.tempo_de_cpu = finalizado.tempo_cpu_const;
                     finalizado.tempo_de_IO = finalizado.tempo_io_const;
                     inserir_fila(&os->so_info.fila_exec, finalizado ,&os->total_exec_analise);
-                }
-                
+                }  
             }
         }
         //Se atualiza umas variaveis para o calculo do tempo

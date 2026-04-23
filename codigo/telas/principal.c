@@ -182,7 +182,7 @@ void desenhar_principal(
         bd * 4,
         ALLEGRO_ALIGN_RIGHT,
         "%d",
-        0
+        globs.processos_finalizados
     );
 
     // --------------------------------------------------

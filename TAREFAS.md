@@ -22,5 +22,5 @@
 - [x] Linha do tempo da execução dos processos
 - [ ] Tempo de espera, resposta para cada processo
 - [x] Uso da CPU (%)
-- [ ] Quantidade de processos finalizados
+- [x] Quantidade de processos finalizados
 - [ ] Tempo médio de espera
