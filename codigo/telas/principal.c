@@ -157,8 +157,7 @@ void desenhar_principal(
         globs.so_info.uso_cpu * 100
     );
 
-    // Uso de CPU
-
+    // Uso de Disco
     al_draw_text(
         fonte_p, COR_BRANCO, LARGURA / 2 + 2 * bd, bd * 3, 0, "· Uso Disco"
     );
@@ -250,12 +249,11 @@ void manusear_principal(ALLEGRO_EVENT ev, Globais *globs) {
         globs->so_info.tempo_total > 0
             ? (float)globs->total_exec_analise / globs->q_processos
             : 0;
-            
+
     globs->so_info.uso_disco =
         globs->so_info.tempo_total > 0
             ? (float)globs->total_io_analise / globs->q_processos
             : 0;
-            printf("%f\n", globs->so_info.uso_disco);
 
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN &&
         ev.keyboard.keycode == ALLEGRO_KEY_TAB) {
