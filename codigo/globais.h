@@ -20,6 +20,7 @@ typedef struct {
 typedef struct {
     int quantum;
     float uso_cpu;
+    float uso_disco;
     char txt_quantum[20];
 
     int tempo_total;

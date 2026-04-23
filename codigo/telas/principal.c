@@ -157,9 +157,10 @@ void desenhar_principal(
         globs.so_info.uso_cpu * 100
     );
 
-    // Média de Espera
+    // Uso de CPU
+
     al_draw_text(
-        fonte_p, COR_BRANCO, LARGURA / 2 + 2 * bd, bd * 3, 0, "· Média Espera"
+        fonte_p, COR_BRANCO, LARGURA / 2 + 2 * bd, bd * 3, 0, "· Uso Disco"
     );
     al_draw_textf(
         fonte_p,
@@ -167,19 +168,33 @@ void desenhar_principal(
         LARGURA / 2 + 293 - bd,
         bd * 3,
         ALLEGRO_ALIGN_RIGHT,
-        "%.1fs",
-        0.0
+        "%.1f%%",
+        globs.so_info.uso_disco * 100
     );
 
-    // Finalizados
+    // Média de Espera
     al_draw_text(
-        fonte_p, COR_BRANCO, LARGURA / 2 + 2 * bd, bd * 4, 0, "· Finalizados"
+        fonte_p, COR_BRANCO, LARGURA / 2 + 2 * bd, bd * 4, 0, "· Média Espera"
     );
     al_draw_textf(
         fonte_p,
         COR_BRANCO,
         LARGURA / 2 + 293 - bd,
         bd * 4,
+        ALLEGRO_ALIGN_RIGHT,
+        "%.1fs",
+        0.0
+    );
+
+    // Finalizados
+    al_draw_text(
+        fonte_p, COR_BRANCO, LARGURA / 2 + 2 * bd, bd * 5, 0, "· Finalizados"
+    );
+    al_draw_textf(
+        fonte_p,
+        COR_BRANCO,
+        LARGURA / 2 + 293 - bd,
+        bd * 5,
         ALLEGRO_ALIGN_RIGHT,
         "%d",
         globs.processos_finalizados
@@ -235,6 +250,12 @@ void manusear_principal(ALLEGRO_EVENT ev, Globais *globs) {
         globs->so_info.tempo_total > 0
             ? (float)globs->total_exec_analise / globs->q_processos
             : 0;
+            
+    globs->so_info.uso_disco =
+        globs->so_info.tempo_total > 0
+            ? (float)globs->total_io_analise / globs->q_processos
+            : 0;
+            printf("%f\n", globs->so_info.uso_disco);
 
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN &&
         ev.keyboard.keycode == ALLEGRO_KEY_TAB) {
