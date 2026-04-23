@@ -31,7 +31,7 @@ make
 
 ### Rápido
 
-Caso você não queira vez a intro do programa toda vez, basta executar a regra de execução rápida.
+Caso você queira pular a intro do programa e preencher os dados automaticamente, basta executar a regra de execução rápida.
 
 ```bash
 make rapido # "make r" também é aceito.
@@ -44,3 +44,7 @@ Caso o programa esteja com algum bug estranho e você queira fazer um debug, bas
 ```bash
 make debug # "make d" também é aceito.
 ```
+
+## Apêndice
+
+![QueOSPM](./materiais/imagens/queospm.jpeg)
