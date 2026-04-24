@@ -14,6 +14,17 @@
 #define LHM ALTURA / 2
 #define LHI ALTURA / 4 + LHM
 
+//CALCULAR MEDIA
+static float calcular_media_espera(Globais *globs) {
+    if (globs->q_processos == 0) return 0;
+    
+    float soma = 0;
+    for (int i = 0; i < globs->q_processos; i++) {
+        soma += globs->processos[i].tempo_espera;
+    }
+    return soma / globs->q_processos;
+}
+
 static void
 desenhar_processo(int x, int y, ALLEGRO_FONT *fonte, int id, Globais globs) {
     al_draw_filled_circle(x, y, 30, COR_BRANCO);
@@ -183,7 +194,7 @@ void desenhar_principal(
         bd * 4,
         ALLEGRO_ALIGN_RIGHT,
         "%.1fs",
-        0.0
+        calcular_media_espera(&globs)
     );
 
     // Quantum
