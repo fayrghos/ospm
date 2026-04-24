@@ -6,6 +6,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/color.h>
+#include <allegro5/allegro_color.h>
 
 int aux = 0;
 int tempo = 0;
@@ -122,6 +123,13 @@ void exec(Globais *os) {
                 tempo_gasto = atual->processo.tempo_de_cpu;
             }
 
+            //logica de temmpo de espera
+            No *aux_espera = atual->prox_no; 
+            while (aux_espera != NULL) {
+                aux_espera->processo.tempo_espera += tempo_gasto;
+                aux_espera = aux_espera->prox_no;
+            }
+
             float larg_real = 10 * tempo_gasto;
             int margem = 90;
             int k = os->total_exec;
@@ -138,6 +146,12 @@ void exec(Globais *os) {
             if (atual->processo.tempo_de_cpu <= 0) {
                 atual->processo.ativo = false;
                 finalizado = remover_fila(&os->so_info.fila_exec);
+                /*jv
+                for(int i = 0; i < os->q_processos; i++) {
+                if(al_compare_colors(os->processos[i].cor, finalizado.cor)) {
+                os->processos[i].tempo_espera = finalizado.tempo_espera;
+                    }
+                }*/
 
                 if (finalizado.tempo_de_IO > 0) {
                     inserir_fila(&os->so_info.fila_IO, finalizado);
@@ -149,6 +163,13 @@ void exec(Globais *os) {
 
             } else if (atual->processo.tempo_de_cpu > 0) {
                 saida = remover_fila(&os->so_info.fila_exec);
+                /*jv
+                for(int i = 0; i < os->q_processos; i++) {
+                    if(al_compare_colors(os->processos[i].cor, finalizado.cor)) {
+                    os->processos[i].tempo_espera = finalizado.tempo_espera;
+                    }
+                }*/
+
                 inserir_fila(&os->so_info.fila_exec, saida);
             }
         }
@@ -188,15 +209,20 @@ void exec(Globais *os) {
                     inserir_fila(&os->so_info.fila_exec, finalizado);
                 }
             }
+
         }
         aux++;
         tempo++;
         os->so_info.tempo_total -= quantum;
+        
     }
+    
 }
 
 void carregar_fila(Globais *os) {
     for (int i = 0; i < os->q_processos; i++) {
+        os->processos[i].tempo_espera = 0;
         inserir_fila(&os->so_info.fila_exec, os->processos[i]);
     }
 }
+

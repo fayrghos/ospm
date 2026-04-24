@@ -114,6 +114,23 @@ void desenhar_principal(
 
     desenhar_tabela(LARGURA / 4, ALTURA / 4, fonte_p, fonte_m, globs);
 
+    /*float soma_espera = 0;
+    for (int i = 0; i < globs.q_processos; i++) {
+        soma_espera += globs.processos[i].tempo_espera;
+    }
+    float tme = (globs.q_processos > 0) ? (soma_espera / globs.q_processos) : 0;
+
+    Desenha o texto do TME logo abaixo do indicador de página
+    al_draw_textf(
+        fonte_p,
+        COR_BRANCO,
+        bd + 107,
+        bd + 90, // Aumentei o Y para ficar abaixo do "Pág. %d"
+        ALLEGRO_ALIGN_CENTER,
+        "TME: %.2f s",
+        tme
+    );*/
+
     al_draw_textf(
         fonte_p,
         COR_BRANCO,
