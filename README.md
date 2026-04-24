@@ -2,6 +2,15 @@
 
 Um pequeno visualizador de processos escrito na linguagem C, em conjunto com a biblioteca Allegro5 para a disciplina de Sistemas Operacionais.
 
+![ImPrincipal](./materiais/repositorio/imprincipal.png)
+![ImProcesso](./materiais/repositorio/improcesso.png)
+
+## Navegação
+
+O programa suporta apenas navegação com o teclado. As teclas gerais de navegação são as setas, a tecla `Enter` para confirmações e `Esc` para correções.
+
+Na tela de visualização, caso o usuário tenha inserido mais de 5 processos, as teclas `Tab` e `Shift` + `Tab` podem ser usadas para, respectivamente, avançar e retroceder as páginas da tabela.
+
 ## Estrutura
 
 - `bin/`: Contém os executáveis após compilações.
@@ -47,4 +56,4 @@ make debug # "make d" também é aceito.
 
 ## Apêndice
 
-![QueOSPM](./materiais/imagens/queospm.jpeg)
+![QueOSPM](./materiais/repositorio/queospm.jpeg)
