@@ -140,6 +140,7 @@ void exec(Globais *os) {
 
         //Se a fila de execução não for vazia se entra no if
         if (!isempty(&os->so_info.fila_exec)) {
+
             int tempo_gasto = quantum; //Somente um apelido
 
             //Pegando o primeiro nó da fila
@@ -151,6 +152,29 @@ void exec(Globais *os) {
                 atual->processo.tempo_de_cpu > 0) {
                 tempo_gasto = atual->processo.tempo_de_cpu;
             }
+
+            // --- CÁLCULO DO TEMPO DE ESPERA ---
+            // Todos os processos que estão na fila de prontos, EXCETO o 'atual',
+            // estão esperando a CPU ser liberada.
+            No *aux_espera = atual->prox_no; 
+            while (aux_espera != NULL) {
+                // 1. Atualiza na fila (importante para quando ele virar o 'atual')
+                aux_espera->processo.tempo_espera += tempo_gasto;
+
+                // 2. Sincroniza com o array global comparando as cores
+                for (int i = 0; i < os->q_processos; i++) {
+                    // Compara se a cor do processo na fila é igual à cor no array global
+                    if (os->processos[i].cor.r == aux_espera->processo.cor.r &&
+                        os->processos[i].cor.g == aux_espera->processo.cor.g &&
+                        os->processos[i].cor.b == aux_espera->processo.cor.b) {
+                        
+                        os->processos[i].tempo_espera += tempo_gasto;
+                        break; // Achou o processo, pode parar o for
+                    }
+                }
+                aux_espera = aux_espera->prox_no;
+            }
+            
 
             //Margem do começo do desenho
             int margem = 90;
@@ -267,6 +291,8 @@ void exec(Globais *os) {
 
 void carregar_fila(Globais *os) {
     for (int i = 0; i < os->q_processos; i++) {
+        os->processos[i].tempo_espera = 0;
+        os->processos[i].ultima_vez_visto = 0; // Ou o tempo atual do sistema
         inserir_fila(&os->so_info.fila_exec, os->processos[i], &os->total_exec_analise);
     }
 }

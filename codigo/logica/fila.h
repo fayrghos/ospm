@@ -11,6 +11,8 @@ typedef struct {
     bool ativo;
     int tempo_cpu_const;
     int tempo_io_const;
+    int tempo_espera;       
+    int ultima_vez_visto;    
 } Processo;
 
 typedef struct No {
