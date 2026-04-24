@@ -14,7 +14,6 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_video.h>
 #include <allegro5/altime.h>
@@ -34,7 +33,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
 
 int main(int argc, char *argv[]) {
     // --------------------------------------------------
@@ -133,8 +131,8 @@ int main(int argc, char *argv[]) {
 
         // Fechamento do programa
         if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE ||
-            globs.mods.ctrl && (ev.keyboard.keycode == ALLEGRO_KEY_Q ||
-                                ev.keyboard.keycode == ALLEGRO_KEY_W)) {
+            (globs.mods.ctrl && (ev.keyboard.keycode == ALLEGRO_KEY_Q ||
+                                 ev.keyboard.keycode == ALLEGRO_KEY_W))) {
             break;
         }
 
@@ -159,7 +157,7 @@ int main(int argc, char *argv[]) {
 
         case T_DEFINIR:
             manusear_definicao(ev, &globs);
-            desenhar_definicao(globs, danael, totem, fonte32, fonte72, timer);
+            desenhar_definicao(globs, fonte32, fonte72, timer);
             break;
 
         case T_PRINCIPAL:

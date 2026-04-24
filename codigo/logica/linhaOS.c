@@ -220,7 +220,6 @@ void exec(Globais *os) {
 
             int j = os->total_IO;
             int k = os->total_exec;
-            int margem = 90;
             os->grad_io[j].fila = 1;
             os->grad_io[j].cor = atual_io->processo.cor;
             os->grad_io[j].tempo_processo = tempo * quantum;

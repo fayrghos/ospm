@@ -15,8 +15,6 @@ void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs);
  */
 void desenhar_definicao(
     Globais globs,
-    ALLEGRO_BITMAP *danael,
-    ALLEGRO_BITMAP *totem,
     ALLEGRO_FONT *fonte_p,
     ALLEGRO_FONT *fonte_g,
     ALLEGRO_TIMER *timer

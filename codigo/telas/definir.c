@@ -14,9 +14,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-static void desenhar_processo(
-    float x, float y, int id, int cor, ALLEGRO_FONT *fonte, Globais globs
-) {
+static void
+desenhar_processo(float x, float y, ALLEGRO_FONT *fonte, Globais globs) {
     // Painél do processo
     al_draw_filled_rounded_rectangle(
         x - 120, y - 130, x + 120, y + 130, 20, 20, COR_CINZA
@@ -149,8 +148,6 @@ void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
 
 void desenhar_definicao(
     Globais globs,
-    ALLEGRO_BITMAP *danael,
-    ALLEGRO_BITMAP *totem,
     ALLEGRO_FONT *fonte_p,
     ALLEGRO_FONT *fonte_g,
     ALLEGRO_TIMER *timer
@@ -188,7 +185,7 @@ void desenhar_definicao(
         timer
     );
 
-    desenhar_processo(300, ALTURA / 2, 1, 0, fonte_p, globs);
+    desenhar_processo(300, ALTURA / 2, fonte_p, globs);
 
     // Piscada do cursor
     if (globs.q_processos_txt[0] == '\0' &&
