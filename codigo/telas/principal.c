@@ -121,8 +121,9 @@ void desenhar_principal(
         bd + 107,
         bd + 65,
         ALLEGRO_ALIGN_CENTER,
-        "Pág. %d",
-        globs.ind_tabela_atual + 1
+        "Pág. %d / %d",
+        globs.ind_tabela_atual + 1,
+        globs.ind_maior_tabela + 1
     );
 
     // --------------------------------------------------
@@ -185,15 +186,43 @@ void desenhar_principal(
         0.0
     );
 
-    // Finalizados
+    // Quantum
     al_draw_text(
-        fonte_p, COR_BRANCO, LARGURA / 2 + 2 * bd, bd * 5, 0, "· Finalizados"
+        fonte_p, COR_BRANCO, LARGURA / 2 + 2 * bd, bd * 5, 0, "· Quantum"
     );
     al_draw_textf(
         fonte_p,
         COR_BRANCO,
         LARGURA / 2 + 293 - bd,
         bd * 5,
+        ALLEGRO_ALIGN_RIGHT,
+        "%d",
+        globs.so_info.quantum
+    );
+
+    // Iniciados
+    al_draw_text(
+        fonte_p, COR_BRANCO, LARGURA / 2 + 2 * bd, bd * 6, 0, "· Iniciados"
+    );
+    al_draw_textf(
+        fonte_p,
+        COR_BRANCO,
+        LARGURA / 2 + 293 - bd,
+        bd * 6,
+        ALLEGRO_ALIGN_RIGHT,
+        "%d",
+        globs.q_processos
+    );
+
+    // Finalizados
+    al_draw_text(
+        fonte_p, COR_BRANCO, LARGURA / 2 + 2 * bd, bd * 7, 0, "· Finalizados"
+    );
+    al_draw_textf(
+        fonte_p,
+        COR_BRANCO,
+        LARGURA / 2 + 293 - bd,
+        bd * 7,
         ALLEGRO_ALIGN_RIGHT,
         "%d",
         globs.processos_finalizados
