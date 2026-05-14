@@ -1,3 +1,4 @@
+#include "../cores.h"
 #include "../globais.h"
 #include "../logica/digitacao.h"
 #include "../utilidades.h"
@@ -12,6 +13,22 @@
 #include <stdlib.h>
 #include <string.h>
 
+static void desenhar_botaozinho(
+    ALLEGRO_FONT *fonte, bool selecionado, float x, float y, char *texto
+) {
+    if (selecionado) {
+        al_draw_filled_rounded_rectangle(
+            x - 203, y - 33, x + 203, y + 33, 20, 20, COR_SELECAO
+        );
+    }
+
+    al_draw_filled_rounded_rectangle(
+        x - 200, y - 30, x + 200, y + 30, 20, 20, COR_CINZA
+    );
+
+    desenhar_texto_cen(x, y, fonte, texto);
+}
+
 void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs) {
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
         if (ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
@@ -20,6 +37,14 @@ void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs) {
 
         if (ev.keyboard.keycode == ALLEGRO_KEY_UP) {
             rodar_inteiro(0, 2, &globs->ind_botao_atual, -1);
+        }
+
+        if (ev.keyboard.keycode == ALLEGRO_KEY_TAB) {
+            if (globs->mods.shift) {
+                rodar_inteiro(0, 3, (int *)&globs->modo_escal, -1);
+            } else {
+                rodar_inteiro(0, 3, (int *)&globs->modo_escal, +1);
+            }
         }
 
         if (ev.keyboard.keycode == ALLEGRO_KEY_ENTER) {
@@ -41,7 +66,7 @@ void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs) {
                 );
                 return;
             }
-            
+
             if (globs->q_processos > 0) {
                 for (int i = 1; i < globs->q_processos; i++) {
                     if (i % 5 == 0) {
@@ -101,8 +126,8 @@ void desenhar_insercao(
     al_draw_bitmap(totem, -65, ALTURA - 325, 0);
 
     desenhar_botao(
-        LARGURA / 2,
-        ALTURA / 2 - 200,
+        LARGURA / 2 + 230,
+        ALTURA / 2 - 180,
         "Total de Processos",
         globs.q_processos_txt,
         globs.ind_botao_atual == 0,
@@ -112,7 +137,7 @@ void desenhar_insercao(
     );
 
     desenhar_botao(
-        LARGURA / 2,
+        LARGURA / 2 + 230,
         ALTURA / 2,
         "Quantum da CPU",
         globs.so_info.txt_quantum,
@@ -123,13 +148,45 @@ void desenhar_insercao(
     );
 
     desenhar_botao(
-        LARGURA / 2,
-        ALTURA / 2 + 200,
+        LARGURA / 2 + 230,
+        ALTURA / 2 + 180,
         "Tempo de Execução Total",
         globs.so_info.txt_tempo_total,
         globs.ind_botao_atual == 2,
         fonte32,
         fonte72,
         timer
+    );
+
+    desenhar_botaozinho(
+        fonte32,
+        globs.modo_escal == ME_ROBIN,
+        LARGURA / 2 - 320,
+        ALTURA / 2 - 120,
+        "Round Robin"
+    );
+
+    desenhar_botaozinho(
+        fonte32,
+        globs.modo_escal == ME_PRIMEIRO,
+        LARGURA / 2 - 320,
+        ALTURA / 2 - 40,
+        "Primeiro Servir"
+    );
+
+    desenhar_botaozinho(
+        fonte32,
+        globs.modo_escal == ME_JOB,
+        LARGURA / 2 - 320,
+        ALTURA / 2 + 40,
+        "Menor Job"
+    );
+
+    desenhar_botaozinho(
+        fonte32,
+        globs.modo_escal == ME_PRIORIDADE,
+        LARGURA / 2 - 320,
+        ALTURA / 2 + 120,
+        "Por Prioridade"
     );
 }

@@ -58,6 +58,17 @@ void desenhar_erros(char *titulo, ALLEGRO_FONT *fonte) {
     );
 }
 
+void desenhar_texto_cen(int x, int y, ALLEGRO_FONT *fonte, char *texto) {
+    al_draw_text(
+        fonte,
+        COR_BRANCO,
+        x,
+        y - (al_get_font_line_height(fonte) / 2.0),
+        ALLEGRO_ALIGN_CENTER,
+        texto
+    );
+}
+
 void desenhar_botao(
     float x,
     float y,
@@ -84,19 +95,8 @@ void desenhar_botao(
 
     if (selecionado && al_get_timer_count(timer) % 20 >= 10 &&
         escrita[0] == '\0') {
-        al_draw_text(fonte_g, COR_BRANCO, x, y - 40, ALLEGRO_ALIGN_CENTER, "_");
+        desenhar_texto_cen(x, y, fonte_g, "_");
     }
 
-    al_draw_text(fonte_g, COR_BRANCO, x, y - 40, ALLEGRO_ALIGN_CENTER, escrita);
-}
-
-void desenhar_texto_cen(int x, int y, ALLEGRO_FONT *fonte, char *texto) {
-    al_draw_text(
-        fonte,
-        COR_BRANCO,
-        x,
-        y - (al_get_font_line_height(fonte) / 2.0),
-        ALLEGRO_ALIGN_CENTER,
-        texto
-    );
+    desenhar_texto_cen(x, y, fonte_g, escrita);
 }

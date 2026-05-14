@@ -1,8 +1,8 @@
 #pragma once
 
 #include "logica/fila.h"
-#include <allegro5/color.h>
 #include <allegro5/allegro_audio.h>
+#include <allegro5/color.h>
 #include <stdbool.h>
 
 // Por algum motivo, o clang-tidy reclama quando isso é int
@@ -42,6 +42,16 @@ typedef enum {
 } ETela;
 
 /*
+ * Enumeração de todos os escalonamentos disponíveis no programa
+ */
+typedef enum {
+    ME_ROBIN,
+    ME_PRIMEIRO,
+    ME_JOB,
+    ME_PRIORIDADE
+} EModoEscalonamento;
+
+/*
  * Gerencia o suporte a combinações de teclado.
  */
 typedef struct {
@@ -57,6 +67,8 @@ typedef struct {
     Modificadores mods;
 
     ETela tela_atual;
+    EModoEscalonamento modo_escal;
+
     int q_processos;
     char q_processos_txt[30];
     bool easter_egg;
