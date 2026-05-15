@@ -34,7 +34,7 @@ desenhar_processo(float x, float y, ALLEGRO_FONT *fonte, Globais globs) {
     al_draw_text(fonte, COR_BRANCO, x, y + 50, ALLEGRO_ALIGN_CENTER, proc_txt);
 }
 
-void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
+void manusear_processos(ALLEGRO_EVENT ev, Globais *globs) {
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
         switch (ev.keyboard.keycode) {
         case ALLEGRO_KEY_DOWN:
@@ -47,7 +47,7 @@ void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
 
         case ALLEGRO_KEY_ESCAPE:
             if (globs->ind_processo_atual == 0) {
-                globs->tela_atual = T_INSERIR;
+                globs->tela_atual = T_INICIAL;
                 break;
             }
 
@@ -146,7 +146,7 @@ void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs) {
     }
 }
 
-void desenhar_definicao(
+void desenhar_processos(
     Globais globs,
     ALLEGRO_FONT *fonte_p,
     ALLEGRO_FONT *fonte_g,

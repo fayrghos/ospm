@@ -8,12 +8,12 @@
 /*
  * Lógica da tela de definição de processos.
  */
-void manusear_definicao(ALLEGRO_EVENT ev, Globais *globs);
+void manusear_processos(ALLEGRO_EVENT ev, Globais *globs);
 
 /*
  * Redesenho da tela de definição de processos.
  */
-void desenhar_definicao(
+void desenhar_processos(
     Globais globs,
     ALLEGRO_FONT *fonte_p,
     ALLEGRO_FONT *fonte_g,

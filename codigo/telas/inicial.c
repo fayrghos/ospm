@@ -29,7 +29,7 @@ static void desenhar_botaozinho(
     desenhar_texto_cen(x, y, fonte, texto);
 }
 
-void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs) {
+void manusear_inicial(ALLEGRO_EVENT ev, Globais *globs) {
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
         if (ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
             rodar_inteiro(0, 2, &globs->ind_botao_atual, +1);
@@ -75,7 +75,7 @@ void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs) {
                 }
 
                 globs->ind_botao_atual = 0;
-                globs->tela_atual = T_DEFINIR;
+                globs->tela_atual = T_PROCESSOS;
             }
         }
 
@@ -108,7 +108,7 @@ void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs) {
     }
 }
 
-void desenhar_insercao(
+void desenhar_inicial(
     Globais globs,
     ALLEGRO_BITMAP *danael,
     ALLEGRO_BITMAP *totem,

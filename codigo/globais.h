@@ -36,8 +36,8 @@ typedef struct {
  */
 typedef enum {
     T_INTRO,
-    T_INSERIR,
-    T_DEFINIR,
+    T_INICIAL,
+    T_PROCESSOS,
     T_PRINCIPAL,
 } ETela;
 

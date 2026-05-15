@@ -8,12 +8,12 @@
 /*
  * Lógica da tela de inserção.
  */
-void manusear_insercao(ALLEGRO_EVENT ev, Globais *globs);
+void manusear_inicial(ALLEGRO_EVENT ev, Globais *globs);
 
 /*
  * Redesenho da tela de inserção.
  */
-void desenhar_insercao(
+void desenhar_inicial(
     Globais globs,
     ALLEGRO_BITMAP *danael,
     ALLEGRO_BITMAP *totem,

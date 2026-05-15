@@ -3,10 +3,10 @@
 #include "globais.h"
 #include "logica/digitacao.h"
 #include "logica/modificadores.h"
-#include "telas/definir.h"
-#include "telas/inserir.h"
+#include "telas/inicial.h"
 #include "telas/intro.h"
 #include "telas/principal.h"
+#include "telas/processos.h"
 #include "utilidades.h"
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_audio.h>
@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
     // Configurações do modo rápido
     if (argc > 1 && strcmp(argv[1], "--rapido") == 0) {
         // Pula a intro
-        globs.tela_atual = T_INSERIR;
+        globs.tela_atual = T_INICIAL;
         al_close_video(intro);
 
         // Tela de inserção
@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
         // Fechamento da intro
         if (ev.type == ALLEGRO_EVENT_VIDEO_FINISHED) {
             al_close_video(intro);
-            globs.tela_atual = T_INSERIR;
+            globs.tela_atual = T_INICIAL;
         }
 
         // O fundo do programa vai ser sempre esse cinza
@@ -150,14 +150,14 @@ int main(int argc, char *argv[]) {
             desenhar_intro(intro);
             break;
 
-        case T_INSERIR:
-            manusear_insercao(ev, &globs);
-            desenhar_insercao(globs, danael, totem, fonte32, fonte72, timer);
+        case T_INICIAL:
+            manusear_inicial(ev, &globs);
+            desenhar_inicial(globs, danael, totem, fonte32, fonte72, timer);
             break;
 
-        case T_DEFINIR:
-            manusear_definicao(ev, &globs);
-            desenhar_definicao(globs, fonte32, fonte72, timer);
+        case T_PROCESSOS:
+            manusear_processos(ev, &globs);
+            desenhar_processos(globs, fonte32, fonte72, timer);
             break;
 
         case T_PRINCIPAL:
@@ -172,7 +172,6 @@ int main(int argc, char *argv[]) {
                     globs.frame_contagem = 0;
                 }
             }
-
             break;
         }
 
