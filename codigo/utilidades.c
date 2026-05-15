@@ -29,17 +29,13 @@ ALLEGRO_BITMAP *carregar_bitmap(char *diretorio) {
 }
 
 void rodar_inteiro(int min, int max, int *atual, int fator) {
-    if (*atual + fator < min) {
-        *atual = min;
-        return;
-    }
-
-    if (*atual + fator > max) {
-        *atual = max;
-        return;
-    }
-
     *atual += fator;
+
+    if (*atual > max) {
+        *atual = min;
+    } else if (*atual < min) {
+        *atual = max;
+    }
 }
 
 void desenhar_erros(char *titulo, ALLEGRO_FONT *fonte) {
