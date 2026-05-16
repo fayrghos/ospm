@@ -123,7 +123,9 @@ void desenhar_inicial(
         return;
     }
 
-    al_draw_bitmap(totem, -65, ALTURA - 325, 0);
+    al_draw_scaled_bitmap(
+        totem, 0, 0, 325, 325, -20, ALTURA - 160, 150, 150, 0
+    );
 
     desenhar_botao(
         LARGURA / 2 + 230,
