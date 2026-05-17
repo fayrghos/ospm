@@ -12,6 +12,7 @@
 #include <allegro5/timer.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../logica/heap.h"
 
 static void desenhar_botaozinho(
     ALLEGRO_FONT *fonte, bool selecionado, float x, float y, char *texto
@@ -77,7 +78,12 @@ void manusear_inicial(ALLEGRO_EVENT ev, Globais *globs) {
                 globs->ind_botao_atual = 0;
                 globs->tela_atual = T_PROCESSOS;
             }
+            if(globs->modo_escal == ME_PRIORIDADE) {
+                organiza_heap(globs->processos, globs->q_processos);
+            }
         }
+
+        
 
         if (ev.keyboard.keycode == ALLEGRO_KEY_D) {
             globs->easter_egg = true;

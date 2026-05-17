@@ -16,3 +16,5 @@ void heap_struct(Globais *os);
 void smallest(Globais *os);
 
 void carregar_fila(Globais *os);
+void fila_heap(Processo *, Fila*);
+void heap_fila(Processo *, int, Fila*);

@@ -2,6 +2,8 @@
 #include "cores.h"
 #include "globais.h"
 #include "logica/digitacao.h"
+#include "logica/fila.h"
+#include "logica/heap.h"
 #include "logica/modificadores.h"
 #include "telas/inicial.h"
 #include "telas/intro.h"
@@ -168,12 +170,15 @@ int main(int argc, char *argv[]) {
 
                 if (globs.frame_contagem >= 24) {
                      // Execução do programa
-                    switch(ME_PRIMEIRO) { //Colocar a variavel da escolha no lugar
+                    switch(globs.modo_escal) { //Colocar a variavel da escolha no lugar
                         case ME_ROBIN:
                             round_robin(&globs);
                             break;
                         case ME_PRIMEIRO:
                             fist_in(&globs);
+                            break;
+                        case ME_PRIORIDADE:
+                            
                             break;
                     }
                     globs.frame_contagem = 0;

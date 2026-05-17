@@ -13,6 +13,7 @@ typedef struct {
     int tempo_io_const;
     int tempo_espera;       
     int ultima_vez_visto;    
+    int prioridade;
 } Processo;
 
 typedef struct No {
