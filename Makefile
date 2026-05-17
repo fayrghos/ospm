@@ -4,43 +4,37 @@ ARGS :=
 CODIGOS := $(shell find . -name "*.c")
 FLAGS :=
 
-BIBLIOS := \
-	-lm \
-	-lallegro \
-	-lallegro_main \
-	-lallegro_audio \
-	-lallegro_dialog \
-	-lallegro_ttf \
-	-lallegro_image \
-	-lallegro_color \
-	-lallegro_memfile \
-	-lallegro_acodec \
-	-lallegro_primitives \
-	-lallegro_font \
-	-lallegro_video
+ALLEGRO := $(shell pkg-config --libs \
+    allegro-5 \
+    allegro_ttf-5 \
+    allegro_font-5 \
+    allegro_image-5 \
+    allegro_audio-5 \
+    allegro_video-5 \
+    allegro_primitives-5)
 
 
 # Roda casualmente o programa
 normal: compilar
-	./${EXEC} ${ARGS}
+	./$(EXEC) $(ARGS)
 
 
 # Executa o programa no modo rápido
 rapido r: ARGS += --rapido
 rapido r: compilar
-	./${EXEC} ${ARGS}
+	./$(EXEC) $(ARGS)
 
 
 # Chama o GDB para fazer debug
 debug d: FLAGS += -g
 debug d: compilar
-	gdb ${EXEC} -q
+	gdb $(EXEC) -q
 
 
 # Apenas compila o binário
 compilar:
 	@mkdir -p bin
-	gcc ${FLAGS} ${CODIGOS} ${BIBLIOS} -o ${EXEC}
+	gcc $(FLAGS) $(CODIGOS) $(ALLEGRO) -o $(EXEC)
 
 
 .PHONY: normal rapido r debug d compilar
