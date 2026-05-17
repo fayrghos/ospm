@@ -10,6 +10,9 @@
 
 void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte);
 
-void exec(Globais *os);
+void round_robin(Globais *os);
+void fist_in(Globais *os);
+void heap_struct(Globais *os);
+void smallest(Globais *os);
 
 void carregar_fila(Globais *os);

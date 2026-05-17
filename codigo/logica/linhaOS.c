@@ -124,7 +124,7 @@ void desenhar_linha_de_execucao(Globais *os, ALLEGRO_FONT *fonte) {
     }
 }
 
-void exec(Globais *os) {
+void round_robin(Globais *os) {
     /*
         Coração do programa, simulador do gerênciamento de processos pelo SO
     */
@@ -227,6 +227,164 @@ void exec(Globais *os) {
                 saida = remover_fila(&os->so_info.fila_exec, &os->total_exec_analise);
                 inserir_fila(&os->so_info.fila_exec, saida, &os->total_exec_analise);
             }
+        }
+
+        //Verifica se a fila não é vazia
+        if (!isempty(&os->so_info.fila_IO)) {
+
+            //Pega o nó atual
+            No *atual_io = pegar_inicio(&os->so_info.fila_IO);
+
+            int tempo_gasto = quantum;
+
+            if (atual_io->processo.tempo_de_IO < quantum &&
+                atual_io->processo.tempo_de_IO > 0) {
+                tempo_gasto = atual_io->processo.tempo_de_IO;
+            }
+
+            int j = os->total_IO;
+            int k = os->total_exec;
+            os->grad_io[j].fila = 1;
+            os->grad_io[j].cor = atual_io->processo.cor;
+            os->grad_io[j].tempo_processo = tempo * quantum;
+
+
+            //Msm esquema da linha de exec, porem o x0 tem por base o processo que a chamou
+            if(j == 0) {
+                if(k > 0) os->grad_io[j].x0 = os->grad_exec[k-1].x1;
+                else os->grad_io[j].x0 = 90;
+            }else {
+                os->grad_io[j].x0 = os->grad_io[j-1].x1 + 5;
+            }
+
+            float larg_final = ((float)tempo_gasto/quantum) * os->escala;
+            os->grad_io[j].x1 = os->grad_io[j].x0 + larg_final;
+
+            os->total_IO++;
+
+            atual_io->processo.tempo_de_IO -= tempo_gasto;
+
+            if (atual_io->processo.tempo_de_IO <= 0) {
+                finalizado = remover_fila(&os->so_info.fila_IO, &os->total_io_analise);
+                //O processo é removido da fila e a quantidade de rodadas é descontado
+                finalizado.quant_rodadas--;
+                if(finalizado.quant_rodadas == 0) {
+                    os->processos_finalizados++;
+                }
+
+                if (finalizado.quant_rodadas > 0) {
+                    //Se ainda não acabou ele retorna a fila de execução e se reseta o tempo de IO
+                    finalizado.tempo_de_cpu = finalizado.tempo_cpu_const;
+                    finalizado.tempo_de_IO = finalizado.tempo_io_const;
+                    inserir_fila(&os->so_info.fila_exec, finalizado ,&os->total_exec_analise);
+                }  
+            }
+        }
+        //Se atualiza umas variaveis para o calculo do tempo
+        //e se decrementa o tempo total
+        aux++;
+        tempo++;
+        os->so_info.tempo_total -= quantum;
+    }
+}
+
+void fist_in(Globais *os) {
+    /*
+        Coração do programa, simulador do gerênciamento de processos pelo SO
+    */
+    
+    //Criação de variaveis utilizadas no programa
+    int quantum = os->so_info.quantum;
+    Processo finalizado;
+    Processo saida;
+
+    // Loop principal do programa
+    //Enquanto o tempo total informado pelo usuário não for zero ele continua rodando a cada 24 ticks/fps
+    if (os->so_info.tempo_total > 0) {
+
+        //Se a fila de execução não for vazia se entra no if
+        if (!isempty(&os->so_info.fila_exec)) {
+
+            int tempo_gasto = quantum; //Somente um apelido
+
+            //Pegando o primeiro nó da fila
+            No *atual = pegar_inicio(&os->so_info.fila_exec);
+
+            //Se o tempo que o processo precisa para executar é menor que o quantum,
+            // se passa o tempo de cpu para o desenho do bloco acompanha e diminuir
+            if (atual->processo.tempo_de_cpu < quantum &&
+                atual->processo.tempo_de_cpu > 0) {
+                tempo_gasto = atual->processo.tempo_de_cpu;
+            }
+
+            // --- CÁLCULO DO TEMPO DE ESPERA ---
+            // Todos os processos que estão na fila de prontos, EXCETO o 'atual',
+            // estão esperando a CPU ser liberada.
+            No *aux_espera = atual->prox_no; 
+            while (aux_espera != NULL) {
+                // 1. Atualiza na fila (importante para quando ele virar o 'atual')
+                aux_espera->processo.tempo_espera += tempo_gasto;
+
+                // 2. Sincroniza com o array global comparando as cores
+                for (int i = 0; i < os->q_processos; i++) {
+                    // Compara se a cor do processo na fila é igual à cor no array global
+                    if (os->processos[i].cor.r == aux_espera->processo.cor.r &&
+                        os->processos[i].cor.g == aux_espera->processo.cor.g &&
+                        os->processos[i].cor.b == aux_espera->processo.cor.b) {
+                        
+                        os->processos[i].tempo_espera += tempo_gasto;
+                        break; // Achou o processo, pode parar o for
+                    }
+                }
+                aux_espera = aux_espera->prox_no;
+            }
+            
+
+            //Margem do começo do desenho
+            int margem = 90;
+            //Indica qual o processo da vez para definir os valores pro desenho
+            int k = os->total_exec;
+            os->grad_exec[k].cor = atual->processo.cor;
+            os->grad_exec[k].tempo_processo = tempo * quantum; //Definição do tempo para desenho (0, 4 , 8)
+            //Tudo em função do quantum
+
+            //Se for o primeiro processo o seu desenho começa no inicio da linha
+            if(k == 0) {
+                os->grad_exec[k].x0 = margem;
+            }else {
+            //Caso não seu inicio é no fim do bloco anterior com um espaço de 5
+                os->grad_exec[k].x0 = os->grad_exec[k-1].x1 + 5;
+            }
+
+            //Cálculo para ter uma largura fixa (Peguei da net)
+            float larg_final = ((float)tempo_gasto/quantum) * os->escala;
+            os->grad_exec[k].x1 = os->grad_exec[k].x0 + larg_final;
+
+            //Incrementa o total_exec/O indice do processo atual
+            os->total_exec++;
+            
+            //Se gasta o tempo do processo atual para verificação
+            atual->processo.tempo_de_cpu -= tempo_gasto;
+
+            //Se o tempo zerou se retira o processo da fila e diminui o total_exec_analise
+            if (atual->processo.tempo_de_cpu <= 0) {
+                finalizado = remover_fila(&os->so_info.fila_exec, &os->total_exec_analise);
+                
+                if(finalizado.tempo_de_IO == 0) {
+                    finalizado.quant_rodadas--;
+                }
+                if (finalizado.quant_rodadas == 0) {
+                        os->processos_finalizados++;
+                }
+                //Se ele tiver trabalho de IO é enviado parFila *fila linha de IO
+                if (finalizado.tempo_de_IO > 0) {
+                    inserir_fila(&os->so_info.fila_IO, finalizado, &os->total_io_analise);
+                } 
+                else if(finalizado.quant_rodadas > 0) {
+                    finalizado.tempo_de_cpu = finalizado.tempo_cpu_const;
+                    inserir_fila(&os->so_info.fila_exec, finalizado, &os->total_exec_analise);
+                }
+            } 
         }
 
         //Verifica se a fila não é vazia

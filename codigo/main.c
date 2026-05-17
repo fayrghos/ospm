@@ -167,7 +167,15 @@ int main(int argc, char *argv[]) {
                 globs.frame_contagem++;
 
                 if (globs.frame_contagem >= 24) {
-                    exec(&globs); // Execução do programa
+                     // Execução do programa
+                    switch(ME_PRIMEIRO) { //Colocar a variavel da escolha no lugar
+                        case ME_ROBIN:
+                            round_robin(&globs);
+                            break;
+                        case ME_PRIMEIRO:
+                            fist_in(&globs);
+                            break;
+                    }
                     globs.frame_contagem = 0;
                 }
             }
