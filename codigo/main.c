@@ -8,6 +8,7 @@
 #include "telas/principal.h"
 #include "telas/processos.h"
 #include "utilidades.h"
+#include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
@@ -50,6 +51,7 @@ int main(int argc, char *argv[]) {
     al_init_image_addon();
     al_init_video_addon();
     al_install_audio();
+    al_init_acodec_addon();
 
     al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST);
     al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);

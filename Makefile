@@ -11,6 +11,7 @@ ALLEGRO := $(shell pkg-config --libs \
     allegro_image-5 \
     allegro_audio-5 \
     allegro_video-5 \
+    allegro_acodec-5 \
     allegro_primitives-5)
 
 
